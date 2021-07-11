@@ -11,22 +11,42 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
-    override func loadView() {
-        view = SKView(frame: .zero)
+    var level: Level!
+    var scene: GameScene!
+    var skView: SKView!
+    
+    func beginGame() {
+      shuffle()
+    }
+
+    func shuffle() {
+      let newCookies = level.shuffle()
+      scene.addSprites(for: newCookies)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let view = self.view as! SKView? {
-            
-            view.ignoresSiblingOrder = true
-            
-            view.showsFPS = true
-            view.showsNodeCount = true
-        }
+        skView = SKView(frame: view.bounds)
+        view.addSubview(skView)
+        
+        skView.ignoresSiblingOrder = true
+        skView.showsFPS = true
+        skView.showsNodeCount = true
+        skView.backgroundColor = .green
+        
+        skView.isMultipleTouchEnabled = false
+        // Create and configure the scene.
+        scene = GameScene(size: skView.bounds.size)
+        level = Level()
+        scene.level = level
+        scene.backgroundColor = .purple
+        
+        // Present the scene.
+        skView.presentScene(scene)
+        beginGame()
     }
-
+    
     override var shouldAutorotate: Bool {
         return true
     }
