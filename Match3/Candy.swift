@@ -7,7 +7,6 @@
 
 import SpriteKit
 
-// MARK: - CookieType
 enum CandyType: Int, CaseIterable {
     case unknown = 0,
          smartie,
@@ -38,7 +37,6 @@ enum CandyType: Int, CaseIterable {
     }
 }
 
-// MARK: - Cookie
 class Candy: CustomStringConvertible, Hashable {
     
     func hash(into hasher: inout Hasher) {
@@ -86,6 +84,40 @@ class Candy: CustomStringConvertible, Hashable {
                 sprite.run(SKAction.scale(by: 0.4, duration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0))
             } else {
                 sprite.run(SKAction.scale(by: -0.4, duration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0))
+                sprite.zPosition = 0.0
+            }
+        }
+    }
+    
+    func match(completion: @escaping (Candy) -> Void) {
+        if let sprite = sprite {
+            let duration: TimeInterval = 0.4
+            let rotateAction = SKAction.rotate(byAngle: 2.0 * CGFloat(Double.pi), duration: duration)
+            let scaleAction = SKAction.scale(by: 3, duration: duration)
+            let fadeAction = SKAction.fadeAlpha(to: 0.0, duration: duration)
+            let actions = SKAction.group([rotateAction, scaleAction, fadeAction])
+
+            sprite.run(actions) { [weak self] in
+                guard let strongSelf = self else { return }
+                completion(strongSelf)
+            }
+        }
+    }
+    
+    func fadeIn(completion: @escaping (Candy) -> Void) {
+        if let sprite = sprite {
+            sprite.alpha = 0.0
+            sprite.xScale = 0.1
+            sprite.yScale = 0.1
+            
+            let duration: TimeInterval = 1
+            let scaleAction = SKAction.scale(to: 1.0, duration: duration, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0)
+            let fadeAction = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
+            let actions = SKAction.group([scaleAction, fadeAction])
+
+            sprite.run(actions) { [weak self] in
+                guard let strongSelf = self else { return }
+                completion(strongSelf)
             }
         }
     }

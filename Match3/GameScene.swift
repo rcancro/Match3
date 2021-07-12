@@ -41,13 +41,18 @@ class GameScene: SKScene {
     
     func addSprites(for candies: Set<Candy>) {
         for candy in candies {
-            let sprite = SKSpriteNode(imageNamed: candy.candyType.spriteName)
-            sprite.size = CGSize(width: tileWidth, height: tileHeight)
-            sprite.position = pointFor(column: candy.column, row: candy.row)
-            candiesLayer.addChild(sprite)
-            candy.sprite = sprite
+            addSprite(for: candy)
         }
     }
+
+    func addSprite(for candy: Candy) {
+        let sprite = SKSpriteNode(imageNamed: candy.candyType.spriteName)
+        sprite.size = CGSize(width: tileWidth, height: tileHeight)
+        sprite.position = pointFor(column: candy.column, row: candy.row)
+        candiesLayer.addChild(sprite)
+        candy.sprite = sprite
+    }
+
     
     private func pointFor(column: Int, row: Int) -> CGPoint {
         return CGPoint(
@@ -120,14 +125,28 @@ class GameScene: SKScene {
             
             if validChain {
                 // we matched, let's play some crazy animation
+                for (_, item) in currentChain.reversed().enumerated() {
+                    item.match { [weak self] candy in
+                        guard let strongSelf = self else { return }
+                        candy.sprite?.removeFromParent()
+                        let replacement = strongSelf.level.replaceCandyWithRandomCandy(candy)
+                        strongSelf.addSprite(for: replacement)
+                        if let replacementSprite = replacement.sprite {
+                            replacementSprite.alpha = 0.0
+                            replacement.fadeIn { candy in
+                                
+                            }
+                        }
+                    }
+                }
             } else {
                 // no match, lets deselect
                 for (index, item) in currentChain.reversed().enumerated() {
                     item.highlight(false, atChainPosition: currentChain.count - index - 1)
                 }
-                currentChain = [Candy]()
             }
-            
+            currentChain = [Candy]()
+
         }
     }
 

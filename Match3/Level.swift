@@ -24,6 +24,16 @@ class Level {
         return createInitialCookies()
     }
     
+    func removeCandy(_ candy: Candy) {
+        candies[candy.column, candy.row] = nil
+    }
+    
+    func replaceCandyWithRandomCandy(_ candy: Candy) -> Candy {
+        let newCandy = Candy(column: candy.column, row: candy.row, candyType: CandyType.random())
+        candies[candy.column, candy.row] = newCandy
+        return newCandy
+    }
+    
     private func createInitialCookies() -> Set<Candy> {
         var set: Set<Candy> = []
         
