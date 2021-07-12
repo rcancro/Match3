@@ -34,6 +34,21 @@ class Level {
         return newCandy
     }
     
+    func chain(atColumn column: Int, row: Int) -> [Candy]? {
+        return candies.chain(atColumn: column, row: row)
+    }
+    
+    func levelStillHasChains() -> Bool {
+        for row in 0..<numRows {
+            for column in 0..<numColumns {
+                if candies.chain(atColumn: column, row: row) != nil {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
     private func createInitialCookies() -> Set<Candy> {
         var set: Set<Candy> = []
         

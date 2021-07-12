@@ -52,7 +52,7 @@ class Candy: CustomStringConvertible, Hashable {
         return "type:\(candyType) square:(\(column),\(row))"
     }
     
-    func isValidForChain(_ chain: [Candy]) -> Bool {
+    func isValidLocationForChain(_ chain: [Candy]) -> Bool {
         if let last = chain.last {
             if last.column == column && abs(last.row - row) == 1 {
                 return true

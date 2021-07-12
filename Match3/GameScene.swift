@@ -18,6 +18,7 @@ class GameScene: SKScene {
     
     let gameLayer = SKNode()
     let candiesLayer = SKNode()
+    var suppressTouches = false
     
     var currentChain = [Candy]()
     var lastElementInChain: Candy? {
@@ -83,6 +84,7 @@ class GameScene: SKScene {
         guard let touch = touches.first else { return }
         let location = touch.location(in: candiesLayer)
         let (success, column, row) = convertPoint(location)
+        
         if success, let candy = level.candy(atColumn: column, row: row) {
             currentChain.append(candy)
             candy.highlight(true, atChainPosition: currentChain.count)
@@ -90,24 +92,30 @@ class GameScene: SKScene {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
+        guard !suppressTouches, let touch = touches.first else { return }
         let location = touch.location(in: candiesLayer)
         let (success, column, row) = convertPoint(location)
         if success, let candy = level.candy(atColumn: column, row: row) {
-            if currentChain.contains(candy), candy != lastElementInChain {
-                // do we break the chain here? we are crossing the streams
-            } else if !currentChain.contains(candy) && candy.isValidForChain(currentChain){
+            if candy.candyType != lastElementInChain!.candyType {
+                endTouches()
+                suppressTouches = true
+            } else if currentChain.contains(candy), candy != lastElementInChain {
+                endTouches()
+                suppressTouches = true
+            } else if !currentChain.contains(candy) && candy.isValidLocationForChain(currentChain){
                 currentChain.append(candy)
                 candy.highlight(true, atChainPosition: currentChain.count)
             }
         }
     }
-    
+
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        suppressTouches = false
         endTouches()
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        suppressTouches = false
         endTouches()
     }
     
@@ -142,29 +150,3 @@ class GameScene: SKScene {
     
 }
 
-extension Array where Element == Candy {
-    
-    func isValidChain() -> Bool {
-        var validChain = count >= 3
-        if validChain {
-            let candyType = randomElement()!.candyType
-            forEach { candy in
-                validChain = validChain && candy.candyType == candyType
-            }
-        }
-        return validChain
-    }
-    
-    func deselectChain() {
-        for (index, item) in reversed().enumerated() {
-            item.highlight(false, atChainPosition: count - index - 1)
-        }
-    }
-    
-    func matchChain(completion: @escaping (Candy) -> Void) {
-        for (_, item) in reversed().enumerated() {
-            item.match(completion: completion)
-        }
-    }
-    
-}
