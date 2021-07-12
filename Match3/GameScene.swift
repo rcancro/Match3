@@ -70,8 +70,7 @@ class GameScene: SKScene {
             let remainderX = point.x.truncatingRemainder(dividingBy: tileWidth + tileSpacing)
             let remainderY = point.y.truncatingRemainder(dividingBy: tileHeight + tileSpacing)
             if remainderX > tileWidth || remainderY > tileHeight{
-                // we are in the spacing
-                return (false, 0, 0)  // invalid location
+                return (false, 0, 0)  // we are in the spacing
             }
 
             return (true, Int(point.x / (tileWidth + tileSpacing)), Int(point.y / (tileHeight + tileSpacing)))
@@ -114,44 +113,58 @@ class GameScene: SKScene {
     
     func endTouches() {
         // check to see if we have a chain.
-        if currentChain.count > 0 {
-            var validChain = currentChain.count >= 3
-            if validChain {
-                let candyType = currentChain.randomElement()!.candyType
-                currentChain.forEach { candy in
-                    validChain = validChain && candy.candyType == candyType
-                }
+        if currentChain.isValidChain() {
+            // we matched, let's play some crazy animation
+            currentChain.matchChain { [weak self] candy in
+                guard let strongSelf = self else { return }
+                strongSelf.cleanUpMatch(candy)
             }
-            
-            if validChain {
-                // we matched, let's play some crazy animation
-                for (_, item) in currentChain.reversed().enumerated() {
-                    item.match { [weak self] candy in
-                        guard let strongSelf = self else { return }
-                        candy.sprite?.removeFromParent()
-                        let replacement = strongSelf.level.replaceCandyWithRandomCandy(candy)
-                        strongSelf.addSprite(for: replacement)
-                        if let replacementSprite = replacement.sprite {
-                            replacementSprite.alpha = 0.0
-                            replacement.fadeIn { candy in
-                                
-                            }
-                        }
-                    }
-                }
-            } else {
-                // no match, lets deselect
-                for (index, item) in currentChain.reversed().enumerated() {
-                    item.highlight(false, atChainPosition: currentChain.count - index - 1)
-                }
-            }
-            currentChain = [Candy]()
-
+        } else {
+            // no match, lets deselect
+            currentChain.deselectChain()
+        }
+        currentChain = [Candy]()
+    }
+    
+    func cleanUpMatch(_ candy: Candy) {
+        candy.sprite?.removeFromParent()
+        let replacement = level.replaceCandyWithRandomCandy(candy)
+        addSprite(for: replacement)
+        if let replacementSprite = replacement.sprite {
+            replacementSprite.alpha = 0.0
+            replacement.fadeIn()
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
+extension Array where Element == Candy {
+    
+    func isValidChain() -> Bool {
+        var validChain = count >= 3
+        if validChain {
+            let candyType = randomElement()!.candyType
+            forEach { candy in
+                validChain = validChain && candy.candyType == candyType
+            }
+        }
+        return validChain
+    }
+    
+    func deselectChain() {
+        for (index, item) in reversed().enumerated() {
+            item.highlight(false, atChainPosition: count - index - 1)
+        }
+    }
+    
+    func matchChain(completion: @escaping (Candy) -> Void) {
+        for (_, item) in reversed().enumerated() {
+            item.match(completion: completion)
+        }
     }
     
 }

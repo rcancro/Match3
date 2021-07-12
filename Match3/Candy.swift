@@ -104,7 +104,7 @@ class Candy: CustomStringConvertible, Hashable {
         }
     }
     
-    func fadeIn(completion: @escaping (Candy) -> Void) {
+    func fadeIn(completion: ((Candy) -> Void)? = nil) {
         if let sprite = sprite {
             sprite.alpha = 0.0
             sprite.xScale = 0.1
@@ -117,7 +117,7 @@ class Candy: CustomStringConvertible, Hashable {
 
             sprite.run(actions) { [weak self] in
                 guard let strongSelf = self else { return }
-                completion(strongSelf)
+                completion?(strongSelf)
             }
         }
     }
