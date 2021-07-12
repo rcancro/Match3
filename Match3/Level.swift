@@ -8,7 +8,7 @@
 import SpriteKit
 
 let numColumns = 7
-let numRows = 12
+let numRows = 11
 
 class Level {
     private var candies = Array2D<Candy>(columns: numColumns, rows: numRows, initialValue: nil)
