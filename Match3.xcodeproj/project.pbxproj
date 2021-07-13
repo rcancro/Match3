@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4A47F1D7269D018D00EC070B /* CountdownLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D6269D018D00EC070B /* CountdownLabel.swift */; };
+		4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */; };
 		9C169399269D43A2007FA97A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C169398269D43A2007FA97A /* Swap.swift */; };
 		9C16939B269D4940007FA97A /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C16939A269D4940007FA97A /* Chain.swift */; };
 		9C3C60E7269BC27400EB5B61 /* SKAction+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C60E6269BC27400EB5B61 /* SKAction+Spring.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		4A47F1D6269D018D00EC070B /* CountdownLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownLabel.swift; sourceTree = "<group>"; };
+		4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverOverlay.swift; sourceTree = "<group>"; };
 		9C169398269D43A2007FA97A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		9C16939A269D4940007FA97A /* Chain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 		9C3C60E6269BC27400EB5B61 /* SKAction+Spring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKAction+Spring.swift"; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				9CD41805269B8ABE00C3F7A0 /* AppDelegate.swift */,
 				9CD4180B269B8ABE00C3F7A0 /* GameScene.swift */,
 				4A47F1D6269D018D00EC070B /* CountdownLabel.swift */,
+				4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */,
 				9CD4180D269B8ABE00C3F7A0 /* GameViewController.swift */,
 				9CD41812269B8AC100C3F7A0 /* Assets.xcassets */,
 				9CD41814269B8AC100C3F7A0 /* Info.plist */,
@@ -208,6 +211,7 @@
 				9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */,
 				9C16939B269D4940007FA97A /* Chain.swift in Sources */,
 				9CD4181B269B8D7900C3F7A0 /* Candy.swift in Sources */,
+				4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */,
 				9C169399269D43A2007FA97A /* Swap.swift in Sources */,
 				4A47F1D7269D018D00EC070B /* CountdownLabel.swift in Sources */,
 				9CD4181D269B9D7200C3F7A0 /* Level.swift in Sources */,

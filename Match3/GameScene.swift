@@ -8,9 +8,15 @@
 import SpriteKit
 import GameplayKit
 
+protocol GameVCDelegate {
+    func gameOver()
+}
+
 class GameScene: SKScene {
     
     var level: Level!
+    
+    var gameVCDelegate:GameVCDelegate!
     
     var timerLabel = CountdownLabel()
     var addTimeButton = SKLabelNode()
@@ -27,14 +33,14 @@ class GameScene: SKScene {
     private var swipeFromRow: Int?
     var swipeHandler: ((Swap) -> Void)?
     
-    
     var currentChain = [Candy]()
     var lastElementInChain: Candy? {
         return currentChain.last
     }
     
-    override init(size: CGSize) {
+    init(size: CGSize, del: GameVCDelegate) {
         super.init(size: size)
+        gameVCDelegate = del
         
         addChild(gameLayer)
         
@@ -49,6 +55,10 @@ class GameScene: SKScene {
         
         setupTimerLabel()
         setupAddTimeButton()
+    }
+    
+    func clearSprites() {
+        candiesLayer.removeAllChildren()
     }
 
     func addSprites(for candies: Set<Candy>) {
@@ -179,7 +189,7 @@ class GameScene: SKScene {
     }
     
     func gameOver(){
-        timerLabel.text = "Game over"
+        gameVCDelegate.gameOver()
     }
     
 // MARK: - Time components
@@ -193,7 +203,7 @@ class GameScene: SKScene {
     }
     
     func setupTimerLabel(){
-        timerLabel.startWithDuration(duration: 15)
+        timerLabel.startWithDuration(duration: 10)
         timerLabel.update()
         timerLabel.fontName = "ChalkboardSE-Bold"
         timerLabel.fontSize = 30

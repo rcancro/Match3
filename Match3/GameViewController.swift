@@ -9,7 +9,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GameVCDelegate {
 
     var level: Level!
     var scene: GameScene!
@@ -17,15 +17,31 @@ class GameViewController: UIViewController {
     
     let scoreLabel = UILabel()
     let scoreValueLabel = UILabel()
-    var score = 0
+    var _score: Int = 0
+    var score: Int {
+        get {
+            return self._score
+        }
+        set {
+            self._score = newValue
+            updateLabels(animated: true)
+        }
+    }
 
+    var gameOverOverlay: GameOverOverlay!
+    var tapGestureRecognizer: UITapGestureRecognizer!
+    
     func beginGame() {
+        score = 0
         level.resetComboMultiplier()
         shuffle()
+        // TODO: Once the timer label is moved to the GameViewController, we should reset the timer here too
+        scene.timerLabel.startWithDuration(duration: 15)
     }
 
     func shuffle() {
       let newCookies = level.shuffle()
+      scene.clearSprites()
       scene.addSprites(for: newCookies)
     }
     
@@ -58,12 +74,18 @@ class GameViewController: UIViewController {
         skView.backgroundColor = .green
         
         skView.isMultipleTouchEnabled = false
+        
+        gameOverOverlay = GameOverOverlay(frame: skView.frame)
+        gameOverOverlay.isHidden = true
+        view.addSubview(gameOverOverlay)
+
         // Create and configure the scene.
-        scene = GameScene(size: skView.bounds.size)
+        scene = GameScene(size: skView.bounds.size, del: self)
         level = Level()
         scene.level = level
         scene.backgroundColor = .purple
         scene.swipeHandler = handleSwipe
+
         // Present the scene.
         skView.presentScene(scene)
         beginGame()
@@ -134,7 +156,7 @@ class GameViewController: UIViewController {
             for chain in chains {
               self.score += chain.score
             }
-            self.updateLabels(animated: true)
+//            self.updateLabels(animated: true)
             
             let fallingColumns = self.level.fillHoles()
             let newColumns = self.level.topUpCookies()
@@ -148,6 +170,33 @@ class GameViewController: UIViewController {
         level.resetComboMultiplier()
         level.detectPossibleSwaps()
         view.isUserInteractionEnabled = true
+    }
+    
+    func showGameOver() {
+        // This can be called repeatedly, so we'll only do the work
+        // if it hasn't been done yet
+        if (gameOverOverlay.isHidden) {
+            gameOverOverlay.score = self.score
+            gameOverOverlay.isHidden = false
+            scene.isUserInteractionEnabled = false
+            self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(hideGameOver))
+            self.view.addGestureRecognizer(self.tapGestureRecognizer)
+        }
+    }
+    
+    @objc func hideGameOver() {
+        if (!gameOverOverlay.isHidden) {
+            view.removeGestureRecognizer(tapGestureRecognizer)
+            tapGestureRecognizer = nil
+            gameOverOverlay.isHidden = true
+            scene.isUserInteractionEnabled = true
+            beginGame()
+        }
+    }
+
+// MARK: - GameVCDelegate
+    func gameOver() {
+        showGameOver()
     }
 
 }
