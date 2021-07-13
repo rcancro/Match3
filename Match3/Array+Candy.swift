@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SpriteKit
 
 extension Array where Element == Candy {
     
@@ -32,9 +33,16 @@ extension Array where Element == Candy {
         }
     }
     
-    func matchChain(completion: @escaping (Candy) -> Void) {
+    func matchChain(completion: @escaping ([Candy]) -> Void) {
+
         for (_, item) in reversed().enumerated() {
-            item.match(completion: completion)
+            item.matchAnimation()
+        }
+        
+        if let anyNode = randomElement() {
+            anyNode.sprite?.run(.wait(forDuration: Candy.matchDuration)) {
+                completion(self)
+            }
         }
     }
 }

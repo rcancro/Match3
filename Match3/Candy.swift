@@ -89,17 +89,17 @@ class Candy: CustomStringConvertible, Hashable {
         }
     }
     
-    func match(completion: @escaping (Candy) -> Void) {
+    static let matchDuration: TimeInterval = 0.25
+    func matchAnimation(completion: ((Candy) -> Void)? = nil) {
         if let sprite = sprite {
-            let duration: TimeInterval = 0.4
-            let rotateAction = SKAction.rotate(byAngle: 2.0 * CGFloat(Double.pi), duration: duration)
-            let scaleAction = SKAction.scale(by: 3, duration: duration)
-            let fadeAction = SKAction.fadeAlpha(to: 0.0, duration: duration)
-            let actions = SKAction.group([rotateAction, scaleAction, fadeAction])
+//            let rotateAction = SKAction.rotate(byAngle: 2.0 * CGFloat(Double.pi), duration: duration)
+            let scaleAction = SKAction.scale(by: 0, duration: Candy.matchDuration)
+            let fadeAction = SKAction.fadeAlpha(to: 0.0, duration: Candy.matchDuration)
+            let actions = SKAction.group([scaleAction, fadeAction])
 
             sprite.run(actions) { [weak self] in
                 guard let strongSelf = self else { return }
-                completion(strongSelf)
+                completion?(strongSelf)
             }
         }
     }
@@ -114,8 +114,9 @@ class Candy: CustomStringConvertible, Hashable {
             let scaleAction = SKAction.scale(to: 1.0, duration: duration, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0)
             let fadeAction = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
             let actions = SKAction.group([scaleAction, fadeAction])
+            let sequence = SKAction.sequence([actions, SKAction.removeFromParent()])
 
-            sprite.run(actions) { [weak self] in
+            sprite.run(sequence) { [weak self] in
                 guard let strongSelf = self else { return }
                 completion?(strongSelf)
             }

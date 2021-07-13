@@ -92,11 +92,11 @@ class GameScene: SKScene {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard !suppressTouches, let touch = touches.first else { return }
+        guard !suppressTouches, let touch = touches.first, let lastElement = lastElementInChain else { return }
         let location = touch.location(in: candiesLayer)
         let (success, column, row) = convertPoint(location)
         if success, let candy = level.candy(atColumn: column, row: row) {
-            if candy.candyType != lastElementInChain!.candyType {
+            if candy.candyType != lastElement.candyType {
                 endTouches()
                 suppressTouches = true
             } else if currentChain.contains(candy), candy != lastElementInChain {
@@ -123,10 +123,7 @@ class GameScene: SKScene {
         // check to see if we have a chain.
         if currentChain.isValidChain() {
             // we matched, let's play some crazy animation
-            currentChain.matchChain { [weak self] candy in
-                guard let strongSelf = self else { return }
-                strongSelf.cleanUpMatch(candy)
-            }
+            handleMatches(currentChain)
         } else {
             // no match, lets deselect
             currentChain.deselectChain()
@@ -134,16 +131,106 @@ class GameScene: SKScene {
         currentChain = [Candy]()
     }
     
-    func cleanUpMatch(_ candy: Candy) {
-        candy.sprite?.removeFromParent()
-        let replacement = level.replaceCandyWithRandomCandy(candy)
-        addSprite(for: replacement)
-        if let replacementSprite = replacement.sprite {
-            replacementSprite.alpha = 0.0
-            replacement.fadeIn()
+    func handleMatches(_ chain: [Candy]) {
+        
+        if chain.count == 0 {
+            self.view?.isUserInteractionEnabled = true
+            return
+        }
+        
+        self.view?.isUserInteractionEnabled = false
+        chain.matchChain { [weak self] candies in
+            guard let strongSelf = self else { return }
+
+            strongSelf.level.removeCandies(candies)
+            let fallingCandies = strongSelf.level.fillHoles()
+            let toppedOffColumns = strongSelf.level.topUpCookies()
+            
+            strongSelf.animate(fallingCandies: fallingCandies, newCandies: toppedOffColumns) {
+                strongSelf.view?.isUserInteractionEnabled = true
+                
+                // look for new chains in the newly moved tiles
+                var combos = Set<Candy>()
+                for column in fallingCandies {
+                    if let candy = column.first {
+                        if let chain = strongSelf.level.chain(atColumn: candy.column, row: candy.row) {
+                            combos.formUnion(chain)
+                        }
+                    }
+                }
+                
+//                // look for new chains in the new tiles
+//                for column in toppedOffColumns {
+//                    for candy in column {
+//                        if let chain = strongSelf.level.chain(atColumn: candy.column, row: candy.row) {
+//                            combos.formUnion(chain)
+//                        }
+//                    }
+//                }
+                
+                strongSelf.handleMatches(Array(combos))
+
+            }
         }
     }
+    
+    func animate(fallingCandies: [[Candy]], newCandies: [[Candy]], completion: @escaping () -> Void) {
+        
+        animateFallingCandies(in: fallingCandies) {
+            
+        }
+        
+        run(SKAction.wait(forDuration: 0.2)) {
+            self.animateNewCandies(in: newCandies, completion: completion)
+        }
 
+    }
+    
+    static let fallingCandyDuration: TimeInterval = 0.8
+    
+    func animateFallingCandies(in columns: [[Candy]], completion: @escaping () -> Void) {
+
+        for array in columns {
+            for (_, candy) in array.enumerated() {
+                let newPosition = pointFor(column: candy.column, row: candy.row)
+                let sprite = candy.sprite!   // sprite always exists at this point
+                
+                let moveAction = SKAction.move(to: newPosition, duration: GameScene.fallingCandyDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0)
+                sprite.run(moveAction)
+            }
+        }
+        
+        run(SKAction.wait(forDuration: GameScene.fallingCandyDuration), completion: completion)
+    }
+    
+    func animateNewCandies(in columns: [[Candy]], completion: @escaping () -> Void) {
+
+        for array in columns {
+            let startRow = array[0].row + 1
+            
+            for (_, candy) in array.enumerated() {
+
+                let sprite = SKSpriteNode(imageNamed: candy.candyType.spriteName)
+                sprite.size = CGSize(width: tileWidth, height: tileHeight)
+                sprite.position = pointFor(column: candy.column, row: startRow)
+                candiesLayer.addChild(sprite)
+                candy.sprite = sprite
+
+                let newPosition = pointFor(column: candy.column, row: candy.row)
+                let moveAction = SKAction.move(to: newPosition, duration: GameScene.fallingCandyDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0)
+                sprite.alpha = 0
+                sprite.run(
+                    SKAction.sequence([
+                        SKAction.group([
+                                        SKAction.fadeIn(withDuration: 0.05),
+                                        moveAction])
+                    ]))
+            }
+        }
+
+        run(SKAction.wait(forDuration: GameScene.fallingCandyDuration), completion: completion)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

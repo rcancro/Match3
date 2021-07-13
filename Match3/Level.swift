@@ -28,6 +28,12 @@ class Level {
         candies[candy.column, candy.row] = nil
     }
     
+    func removeCandies(_ candies: [Candy]) {
+        candies.forEach { candy in
+            self.removeCandy(candy)
+        }
+    }
+    
     func replaceCandyWithRandomCandy(_ candy: Candy) -> Candy {
         let newCandy = Candy(column: candy.column, row: candy.row, candyType: CandyType.random())
         candies[candy.column, candy.row] = newCandy
@@ -47,6 +53,60 @@ class Level {
             }
         }
         return false
+    }
+    
+    func topUpCookies() -> [[Candy]] {
+        var columns: [[Candy]] = []
+        var candyType: CandyType = .unknown
+        
+        for column in 0..<numColumns {
+            var array: [Candy] = []
+            
+            var row = numRows - 1
+            while row >= 0 && candies[column, row] == nil {
+                var newCandyType: CandyType
+                repeat {
+                    newCandyType = CandyType.random()
+                } while newCandyType == candyType
+                candyType = newCandyType
+
+                let candy = Candy(column: column, row: row, candyType: candyType)
+                candies[column, row] = candy
+                array.append(candy)
+                
+                row -= 1
+            }
+
+            if !array.isEmpty {
+                columns.append(array)
+            }
+        }
+        return columns
+    }
+    
+    func fillHoles() -> [[Candy]] {
+        var columns: [[Candy]] = []
+        for column in 0..<numColumns {
+            var array: [Candy] = []
+            for row in 0..<numRows {
+                if candies[column, row] == nil {
+                    // 3
+                    for lookup in (row + 1)..<numRows {
+                        if let candy = candies[column, lookup] {
+                            candies[column, lookup] = nil
+                            candies[column, row] = candy
+                            candy.row = row
+                            array.append(candy)
+                            break
+                        }
+                    }
+                }
+            }
+            if !array.isEmpty {
+                columns.append(array)
+            }
+        }
+        return columns
     }
     
     private func createInitialCookies() -> Set<Candy> {
