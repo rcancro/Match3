@@ -20,6 +20,9 @@ class GameViewController: UIViewController {
     
     let timeLabel = UILabel()
     let timeValueLabel = CountdownLabel()
+    let pinny = Pinny()
+
+    let yMargins: CGFloat = 4
     
     var _score: Int = 0
     var score: Int {
@@ -108,6 +111,9 @@ class GameViewController: UIViewController {
         scene.level = level
         scene.backgroundColor = .purple
         scene.swipeHandler = handleSwipe
+        
+        pinny.animate()
+        scene.addChild(pinny)
 
         // Present the scene.
         skView.presentScene(scene)
@@ -130,7 +136,6 @@ class GameViewController: UIViewController {
         super.viewWillLayoutSubviews()
         
         let xMargins: CGFloat = 16
-        let yMargins: CGFloat = 4
         let labelPadding: CGFloat = 2
         let maxLabelWidth = view.frame.width * 0.3
         
@@ -145,6 +150,10 @@ class GameViewController: UIViewController {
         
         let timeValueSize = timeValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
         timeValueLabel.frame = CGRect(x: view.frame.width - (xMargins + maxLabelWidth), y: scoreLabel.frame.maxY + labelPadding, width: maxLabelWidth, height: timeValueSize.height)
+        
+        let unionRect = timeValueLabel.frame.union(timeLabel.frame)
+
+        pinny.position = CGPoint(x: view.center.x, y: view.frame.height - unionRect.midY)
 
     }
         

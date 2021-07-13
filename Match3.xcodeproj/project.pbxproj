@@ -16,6 +16,8 @@
 		9C858A2C269CAACB0052689D /* Array2D+Candy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C858A2B269CAACB0052689D /* Array2D+Candy.swift */; };
 		9CAED692269E31C10020E9AA /* Kenney Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CAED690269E31C10020E9AA /* Kenney Bold.ttf */; };
 		9CAED693269E31C10020E9AA /* Kenney Future Square.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CAED691269E31C10020E9AA /* Kenney Future Square.ttf */; };
+		9CAED69B269E4A090020E9AA /* pinny.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 9CAED69A269E4A090020E9AA /* pinny.atlas */; };
+		9CAED69D269E4DF90020E9AA /* Pinny.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAED69C269E4DF90020E9AA /* Pinny.swift */; };
 		9CD41806269B8ABE00C3F7A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD41805269B8ABE00C3F7A0 /* AppDelegate.swift */; };
 		9CD4180C269B8ABE00C3F7A0 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD4180B269B8ABE00C3F7A0 /* GameScene.swift */; };
 		9CD4180E269B8ABE00C3F7A0 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD4180D269B8ABE00C3F7A0 /* GameViewController.swift */; };
@@ -41,6 +43,8 @@
 		9C858A2B269CAACB0052689D /* Array2D+Candy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array2D+Candy.swift"; sourceTree = "<group>"; };
 		9CAED690269E31C10020E9AA /* Kenney Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Bold.ttf"; sourceTree = "<group>"; };
 		9CAED691269E31C10020E9AA /* Kenney Future Square.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Future Square.ttf"; sourceTree = "<group>"; };
+		9CAED69A269E4A090020E9AA /* pinny.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = pinny.atlas; path = Assets.xcassets/pinny.atlas; sourceTree = "<group>"; };
+		9CAED69C269E4DF90020E9AA /* Pinny.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinny.swift; sourceTree = "<group>"; };
 		9CD41802269B8ABE00C3F7A0 /* Match3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Match3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CD41805269B8ABE00C3F7A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9CD4180B269B8ABE00C3F7A0 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -105,6 +109,7 @@
 				4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */,
 				9CD4180D269B8ABE00C3F7A0 /* GameViewController.swift */,
 				9CD41812269B8AC100C3F7A0 /* Assets.xcassets */,
+				9CAED69A269E4A090020E9AA /* pinny.atlas */,
 				9CD41814269B8AC100C3F7A0 /* Info.plist */,
 				9CD4181A269B8D7900C3F7A0 /* Candy.swift */,
 				9CD4181C269B9D7200C3F7A0 /* Level.swift */,
@@ -116,6 +121,7 @@
 				9C858A2B269CAACB0052689D /* Array2D+Candy.swift */,
 				9C169398269D43A2007FA97A /* Swap.swift */,
 				9C16939A269D4940007FA97A /* Chain.swift */,
+				9CAED69C269E4DF90020E9AA /* Pinny.swift */,
 			);
 			path = Match3;
 			sourceTree = "<group>";
@@ -191,6 +197,7 @@
 				CD1C5451269E322D00617B21 /* impactMetal_light_002.wav in Resources */,
 				CD1C5452269E322D00617B21 /* impactMetal_light_004.wav in Resources */,
 				9CAED692269E31C10020E9AA /* Kenney Bold.ttf in Resources */,
+				9CAED69B269E4A090020E9AA /* pinny.atlas in Resources */,
 				9CD41813269B8AC100C3F7A0 /* Assets.xcassets in Resources */,
 				9CAED693269E31C10020E9AA /* Kenney Future Square.ttf in Resources */,
 				CD1C5450269E322D00617B21 /* impactMetal_light_001.wav in Resources */,
@@ -210,6 +217,7 @@
 				9C3C60E7269BC27400EB5B61 /* SKAction+Spring.swift in Sources */,
 				9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */,
 				9C16939B269D4940007FA97A /* Chain.swift in Sources */,
+				9CAED69D269E4DF90020E9AA /* Pinny.swift in Sources */,
 				9CD4181B269B8D7900C3F7A0 /* Candy.swift in Sources */,
 				4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */,
 				9C169399269D43A2007FA97A /* Swap.swift in Sources */,
