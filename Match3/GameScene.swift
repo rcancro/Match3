@@ -183,6 +183,7 @@ class GameScene: SKScene {
     }
     
 // MARK: - Time components
+    
     override func update(_ currentTime: TimeInterval) {
         // tell the timer to update
         timerLabel.update()
@@ -226,11 +227,7 @@ class GameScene: SKScene {
         }
     }
 
-// MARK: - Misc
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+// MARK: - Animations
     
     func animate(_ swap: Swap, completion: @escaping () -> Void) {
         let spriteA = swap.candyA.sprite!
@@ -339,5 +336,12 @@ class GameScene: SKScene {
         
         run(SKAction.wait(forDuration: GameScene.fallingCandyDuration), completion: completion)
     }
+
+// MARK: - Misc
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }
 
