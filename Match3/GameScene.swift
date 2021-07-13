@@ -12,10 +12,6 @@ class GameScene: SKScene {
     
     var level: Level!
     
-    var timerLabel = CountdownLabel()
-    var addTimeButton = SKLabelNode()
-    let topBarYOffset: CGFloat = 70
-    
     let tileWidth: CGFloat = 48.0
     let tileHeight: CGFloat = 48.0
     let tileSpacing: CGFloat = 8.0

@@ -24,6 +24,9 @@ class GameViewController: UIViewController {
 
     let yMargins: CGFloat = 4
     
+    let shuffleLabel = UILabel()
+    var shuffleTapGestureRecognizer: UITapGestureRecognizer!
+    
     var _score: Int = 0
     var score: Int {
         get {
@@ -36,7 +39,7 @@ class GameViewController: UIViewController {
     }
 
     var gameOverOverlay: GameOverOverlay!
-    var tapGestureRecognizer: UITapGestureRecognizer!
+    var gameOverTapGestureRecognizer: UITapGestureRecognizer!
     
     func beginGame() {
         score = 0
@@ -93,6 +96,16 @@ class GameViewController: UIViewController {
         timeValueLabel.textColor = .white
         timeValueLabel.setTime(duration: level.baseLevelTime)
         timeValueLabel.delegate = self
+        
+        shuffleLabel.font = customFont(ofSize: 18)
+        shuffleLabel.text = "SHUFFLE"
+        shuffleLabel.textAlignment = .center
+        shuffleLabel.textColor = .white
+        shuffleLabel.isUserInteractionEnabled = true
+        view.addSubview(shuffleLabel)
+        
+        shuffleTapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(handleShuffleButtonTapped))
+        shuffleLabel.addGestureRecognizer(self.shuffleTapGestureRecognizer)
 
         skView.ignoresSiblingOrder = true
         skView.showsFPS = true
@@ -152,10 +165,17 @@ class GameViewController: UIViewController {
         timeValueLabel.frame = CGRect(x: view.frame.width - (xMargins + maxLabelWidth), y: scoreLabel.frame.maxY + labelPadding, width: maxLabelWidth, height: timeValueSize.height)
         
         let unionRect = timeValueLabel.frame.union(timeLabel.frame)
-
         pinny.position = CGPoint(x: view.center.x, y: view.frame.height - unionRect.midY)
 
+        let shuffleLabelSize = shuffleLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+        shuffleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth/2), y: unionRect.maxY + labelPadding, width:maxLabelWidth, height: shuffleLabelSize.height)
     }
+    
+    @objc func handleShuffleButtonTapped() {
+        shuffle()
+        self.timeValueLabel.addTime(duration: level.shufflePenalityTime)
+    }
+    
         
     func handleSwipe(_ swap: Swap) {
         view.isUserInteractionEnabled = false
@@ -213,15 +233,15 @@ class GameViewController: UIViewController {
             gameOverOverlay.score = self.score
             gameOverOverlay.isHidden = false
             scene.isUserInteractionEnabled = false
-            self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(hideGameOver))
-            self.view.addGestureRecognizer(self.tapGestureRecognizer)
+            self.gameOverTapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(hideGameOver))
+            self.view.addGestureRecognizer(self.gameOverTapGestureRecognizer)
         }
     }
     
     @objc func hideGameOver() {
         if (!gameOverOverlay.isHidden) {
-            view.removeGestureRecognizer(tapGestureRecognizer)
-            tapGestureRecognizer = nil
+            view.removeGestureRecognizer(gameOverTapGestureRecognizer)
+            gameOverTapGestureRecognizer = nil
             gameOverOverlay.isHidden = true
             scene.isUserInteractionEnabled = true
             beginGame()
