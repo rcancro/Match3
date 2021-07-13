@@ -59,6 +59,9 @@ class GameViewController: UIViewController {
         skView = SKView(frame: view.bounds)
         view.addSubview(skView)
         level = Level()
+        
+        // preload our sounds
+        let _ = SKAction.randomBurstSound
 
         scoreLabel.font = customFont(ofSize: 16)
         scoreLabel.text = "SCORE"
