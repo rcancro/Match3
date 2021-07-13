@@ -20,6 +20,12 @@
 		9CD4181D269B9D7200C3F7A0 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD4181C269B9D7200C3F7A0 /* Level.swift */; };
 		9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD4181E269B9DE000C3F7A0 /* Array2D.swift */; };
 		9CD41821269BA75D00C3F7A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD41820269BA75D00C3F7A0 /* LaunchScreen.storyboard */; };
+		CD1C5444269E27AD00617B21 /* impactMetal_light_004.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD1C543F269E27AD00617B21 /* impactMetal_light_004.wav */; };
+		CD1C5445269E27AD00617B21 /* impactMetal_light_003.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD1C5440269E27AD00617B21 /* impactMetal_light_003.wav */; };
+		CD1C5446269E27AD00617B21 /* impactMetal_light_001.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD1C5441269E27AD00617B21 /* impactMetal_light_001.wav */; };
+		CD1C5447269E27AD00617B21 /* impactMetal_light_002.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD1C5442269E27AD00617B21 /* impactMetal_light_002.wav */; };
+		CD1C5448269E27AD00617B21 /* impactMetal_light_000.wav in Resources */ = {isa = PBXBuildFile; fileRef = CD1C5443269E27AD00617B21 /* impactMetal_light_000.wav */; };
+		CD1C544A269E283800617B21 /* SKAction+Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1C5449269E283800617B21 /* SKAction+Sounds.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +44,12 @@
 		9CD4181C269B9D7200C3F7A0 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		9CD4181E269B9DE000C3F7A0 /* Array2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		9CD41820269BA75D00C3F7A0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CD1C543F269E27AD00617B21 /* impactMetal_light_004.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = impactMetal_light_004.wav; sourceTree = "<group>"; };
+		CD1C5440269E27AD00617B21 /* impactMetal_light_003.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = impactMetal_light_003.wav; sourceTree = "<group>"; };
+		CD1C5441269E27AD00617B21 /* impactMetal_light_001.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = impactMetal_light_001.wav; sourceTree = "<group>"; };
+		CD1C5442269E27AD00617B21 /* impactMetal_light_002.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = impactMetal_light_002.wav; sourceTree = "<group>"; };
+		CD1C5443269E27AD00617B21 /* impactMetal_light_000.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = impactMetal_light_000.wav; sourceTree = "<group>"; };
+		CD1C5449269E283800617B21 /* SKAction+Sounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKAction+Sounds.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +82,7 @@
 		9CD41804269B8ABE00C3F7A0 /* Match3 */ = {
 			isa = PBXGroup;
 			children = (
+				CD1C543E269E275000617B21 /* Audio */,
 				9CD41805269B8ABE00C3F7A0 /* AppDelegate.swift */,
 				9CD4180B269B8ABE00C3F7A0 /* GameScene.swift */,
 				9CD4180D269B8ABE00C3F7A0 /* GameViewController.swift */,
@@ -84,8 +97,21 @@
 				9C858A2B269CAACB0052689D /* Array2D+Candy.swift */,
 				9C169398269D43A2007FA97A /* Swap.swift */,
 				9C16939A269D4940007FA97A /* Chain.swift */,
+				CD1C5449269E283800617B21 /* SKAction+Sounds.swift */,
 			);
 			path = Match3;
+			sourceTree = "<group>";
+		};
+		CD1C543E269E275000617B21 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				CD1C5443269E27AD00617B21 /* impactMetal_light_000.wav */,
+				CD1C5441269E27AD00617B21 /* impactMetal_light_001.wav */,
+				CD1C5442269E27AD00617B21 /* impactMetal_light_002.wav */,
+				CD1C5440269E27AD00617B21 /* impactMetal_light_003.wav */,
+				CD1C543F269E27AD00617B21 /* impactMetal_light_004.wav */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,8 +171,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD1C5447269E27AD00617B21 /* impactMetal_light_002.wav in Resources */,
+				CD1C5444269E27AD00617B21 /* impactMetal_light_004.wav in Resources */,
 				9CD41813269B8AC100C3F7A0 /* Assets.xcassets in Resources */,
 				9CD41821269BA75D00C3F7A0 /* LaunchScreen.storyboard in Resources */,
+				CD1C5446269E27AD00617B21 /* impactMetal_light_001.wav in Resources */,
+				CD1C5448269E27AD00617B21 /* impactMetal_light_000.wav in Resources */,
+				CD1C5445269E27AD00617B21 /* impactMetal_light_003.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +191,7 @@
 				9CD4180C269B8ABE00C3F7A0 /* GameScene.swift in Sources */,
 				9C3C60E7269BC27400EB5B61 /* SKAction+Spring.swift in Sources */,
 				9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */,
+				CD1C544A269E283800617B21 /* SKAction+Sounds.swift in Sources */,
 				9C16939B269D4940007FA97A /* Chain.swift in Sources */,
 				9CD4181B269B8D7900C3F7A0 /* Candy.swift in Sources */,
 				9C169399269D43A2007FA97A /* Swap.swift in Sources */,

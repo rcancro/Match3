@@ -203,15 +203,19 @@ class GameScene: SKScene {
         spriteB.run(SKAction.sequence([moveB, moveA]))
     }
     
+    
     func animateMatchedCandies(for chains: Set<Chain>, completion: @escaping () -> Void) {
+        var burst = [SKAction.randomBurstSound]
         for chain in chains {
             for candy in chain.candies {
                 if let sprite = candy.sprite {
                     if sprite.action(forKey: "removing") == nil {
+                        
                         let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
                         scaleAction.timingMode = .easeOut
-                        sprite.run(SKAction.sequence([scaleAction, SKAction.removeFromParent()]),
-                                   withKey: "removing")
+                        sprite.run(SKAction.sequence(burst + [scaleAction, SKAction.removeFromParent()]),
+                               withKey: "removing")
+                        burst = [] // Only play the audio once
                     }
                 }
             }
