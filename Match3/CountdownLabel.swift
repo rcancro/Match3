@@ -7,47 +7,82 @@
 
 import SpriteKit
 
-class CountdownLabel: SKLabelNode {
+protocol CountdownLabelDelegate : AnyObject {
+    func countdownLabelDidExpire(_ countdownLabel: CountdownLabel) -> Void
+}
+
+class CountdownLabel: UILabel {
     
-    var endTime:Date!
+    private var remainingTime: TimeInterval = 0.0
+    var maxTime: TimeInterval = 120
+    var timeRunningOutColor: UIColor = .red
+    weak var delegate: CountdownLabelDelegate?
     
-    func addTime(duration: TimeInterval){
-        endTime = endTime.addingTimeInterval(duration)
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
     }
     
-    func update(){
-        let timeLeftInteger = Int(timeLeft())
-        if (timeLeftInteger >= 0) {
-            text = secondsIntoTimeRemaining(seconds:timeLeftInteger)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func startCountdown() {
+        if remainingTime > 0 {
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] timer in
+                guard let strongSelf = self else { return }
+                strongSelf.remainingTime = max(0, strongSelf.remainingTime - 1)
+                if strongSelf.remainingTime <= 10 {
+                    strongSelf.textColor = strongSelf.timeRunningOutColor
+                } else {
+                    strongSelf.textColor = .white
+                }
+                
+                strongSelf.updateText()
+                strongSelf.bumpAnimation()
+                
+                if strongSelf.remainingTime == 0 {
+                    timer.invalidate()
+                    strongSelf.delegate?.countdownLabelDidExpire(strongSelf)
+                }
+            })
         }
     }
     
+    func setTime(duration: TimeInterval){
+        remainingTime = duration
+        updateText()
+    }
+
+    func addTime(duration: TimeInterval){
+        remainingTime = min(maxTime, remainingTime + duration)
+        updateText()
+        bumpAnimation()
+    }
+    
+    func updateText() {
+        text = "\(Int(remainingTime))"
+    }
+
+    
     func startWithDuration(duration: TimeInterval){
-        let timeNow = Date()
-        endTime = timeNow.addingTimeInterval(duration)
+        remainingTime = duration
     }
 
     func hasFinished() -> Bool{
-        return timeLeft() == 0
+        return remainingTime == 0
     }
 
-    private func timeLeft() -> TimeInterval{
-        let now = Date();
-        let remainingSeconds = endTime.timeIntervalSince(now)
-        return max(remainingSeconds, 0)
-    }
+}
+
+extension UILabel {
     
-    private func secondsIntoTimeRemaining(seconds: Int) -> String{
-        var result = ""
-        result.append(String(seconds / 60))
-        result.append(":")
-        
-        let remainingSeconds = seconds % 60
-        if (remainingSeconds < 10) {
-            result.append("0") // 1:08 instead of 1:8
+    func bumpAnimation() {
+        UIView.animate(withDuration: 0.15) {
+            self.transform = CGAffineTransform.init(scaleX: 1.2, y: 1.2)
+        } completion: { finished in
+            UIView.animate(withDuration: 0.15) {
+                self.transform = CGAffineTransform.init(scaleX: 1.0, y: 1.0)
+            }
         }
-        result.append(String(remainingSeconds))
-        
-        return result
     }
 }

@@ -12,8 +12,6 @@ class GameScene: SKScene {
     
     var level: Level!
     
-    var timerLabel = CountdownLabel()
-    var addTimeButton = SKLabelNode()
     let topBarYOffset: CGFloat = 70
     
     let tileWidth: CGFloat = 48.0
@@ -46,9 +44,6 @@ class GameScene: SKScene {
         
         candiesLayer.position = layerPosition
         gameLayer.addChild(candiesLayer)
-        
-        setupTimerLabel()
-        setupAddTimeButton()
     }
 
     func addSprites(for candies: Set<Candy>) {
@@ -103,11 +98,6 @@ class GameScene: SKScene {
                 swipeFromColumn = column
                 swipeFromRow = row
             }
-        }
-        
-        // Check if the user touched the "add time" button
-        if (addTimeButton.frame.contains(touch.location(in: self))){
-            addTime(duration: 30)
         }
     }
     
@@ -178,53 +168,7 @@ class GameScene: SKScene {
         }
     }
     
-    func gameOver(){
-        timerLabel.text = "Game over"
-    }
-    
-// MARK: - Time components
-    
-    override func update(_ currentTime: TimeInterval) {
-        // tell the timer to update
-        timerLabel.update()
-        if (timerLabel.hasFinished()) {
-            gameOver()
-        }
-    }
-    
-    func setupTimerLabel(){
-        timerLabel.startWithDuration(duration: 15)
-        timerLabel.update()
-        timerLabel.fontName = "ChalkboardSE-Bold"
-        timerLabel.fontSize = 30
-        timerLabel.fontColor = SKColor.white
-        timerLabel.position = CGPoint(x: frame.midX, y: frame.maxY - topBarYOffset)
-        addChild(timerLabel)
-    }
-    
-    func setupAddTimeButton(){
-        let padding = 30.0
-
-        addTimeButton = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
-        addTimeButton.fontSize = 16
-        addTimeButton.text = "Add time"
-        addTimeButton.position = CGPoint(x: frame.maxX - CGFloat(padding) - addTimeButton.frame.size.width / 2, y: frame.maxY - topBarYOffset)
-
-        let backgroundPadding = 4.0
-        let backgroundWidth = addTimeButton.frame.size.width + CGFloat(backgroundPadding * 2.0)
-        let backgroundHeight = addTimeButton.frame.size.height + CGFloat(backgroundPadding * 2.0)
-        let addTimeButtonBackground = SKSpriteNode(color: UIColor.blue, size: CGSize(width: CGFloat(backgroundWidth), height:CGFloat(backgroundHeight)))
-        addTimeButtonBackground.position = CGPoint(x: CGFloat(0), y: addTimeButton.frame.height / 2)
-        addTimeButtonBackground.anchorPoint = CGPoint(x:0.5, y:0.5)
-        addTimeButtonBackground.zPosition = -1
-        addTimeButton.addChild(addTimeButtonBackground)
-        addChild(addTimeButton)
-    }
-    
-    func addTime(duration: TimeInterval){
-        if !timerLabel.hasFinished(){
-            timerLabel.addTime(duration: duration)
-        }
+    func gameOver() {
     }
 
 // MARK: - Animations

@@ -10,6 +10,7 @@ import Foundation
 class Chain: Hashable, CustomStringConvertible {
     var candies: [Candy] = []
     var score = 0
+    var bonusTime: TimeInterval = 0
     
     enum ChainType: CustomStringConvertible {
         case horizontal

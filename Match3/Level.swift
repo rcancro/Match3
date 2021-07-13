@@ -14,6 +14,8 @@ class Level {
     private var candies = Array2D<Candy>(columns: numColumns, rows: numRows, initialValue: nil)
     private var possibleSwaps: Set<Swap> = []
     private var comboMultiplier = 1
+    let baseLevelTime: TimeInterval = 30
+    private var comboTimeMultiplier = 1.0
     
     func candy(atColumn column: Int, row: Int) -> Candy? {
         precondition(column >= 0 && column < numColumns)
@@ -194,6 +196,7 @@ class Level {
     
     func resetComboMultiplier() {
         comboMultiplier = 0
+        comboTimeMultiplier = 1.0
     }
     
     private func calculateScores(for chains: Set<Chain>) {
@@ -207,6 +210,14 @@ class Level {
         }
     }
     
+    private func calculateBonusTime(for  chains: Set<Chain>) {
+        for chain in chains {
+            let scoreChainLength = chain.length - 2
+            chain.bonusTime = ceil(Double(scoreChainLength) * 1.1 * comboTimeMultiplier)
+            comboTimeMultiplier = comboTimeMultiplier * 1.5
+        }
+    }
+    
     func removeMatches() -> Set<Chain> {
         let horizontalChains = detectHorizontalMatches()
         let verticalChains = detectVerticalMatches()
@@ -216,6 +227,9 @@ class Level {
         
         calculateScores(for: horizontalChains)
         calculateScores(for: verticalChains)
+        
+        calculateBonusTime(for: horizontalChains)
+        calculateBonusTime(for: verticalChains)
         
         return horizontalChains.union(verticalChains)
     }
