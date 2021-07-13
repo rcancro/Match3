@@ -27,6 +27,8 @@ class GameViewController: UIViewController {
     let shuffleLabel = UILabel()
     var shuffleTapGestureRecognizer: UITapGestureRecognizer!
     
+    var wiggleTimer = Timer()
+    
     var _score: Int = 0
     var score: Int {
         get {
@@ -46,6 +48,7 @@ class GameViewController: UIViewController {
         level.resetComboMultiplier()
         timeValueLabel.setTime(duration: level.baseLevelTime)
         timeValueLabel.startCountdown()
+        restartHintTimer()
         shuffle()
     }
 
@@ -176,6 +179,13 @@ class GameViewController: UIViewController {
         self.timeValueLabel.addTime(duration: level.shufflePenalityTime)
     }
     
+    func restartHintTimer() {
+        wiggleTimer.invalidate()
+        wiggleTimer = Timer.scheduledTimer(withTimeInterval: level.hintDelayTime, repeats: true, block: { [weak self] timer in
+            guard let strongSelf = self else { return }
+            strongSelf.wiggleHint()
+        })
+    }
         
     func handleSwipe(_ swap: Swap) {
         view.isUserInteractionEnabled = false
@@ -198,6 +208,7 @@ class GameViewController: UIViewController {
             return
         }
         
+        restartHintTimer()
         scene.animateMatchedCandies(for: chains) {
             for chain in chains {
                 self.score += chain.score
@@ -230,6 +241,7 @@ class GameViewController: UIViewController {
         // This can be called repeatedly, so we'll only do the work
         // if it hasn't been done yet
         if (gameOverOverlay.isHidden) {
+            wiggleTimer.invalidate()
             gameOverOverlay.score = self.score
             gameOverOverlay.isHidden = false
             scene.isUserInteractionEnabled = false
@@ -245,6 +257,14 @@ class GameViewController: UIViewController {
             gameOverOverlay.isHidden = true
             scene.isUserInteractionEnabled = true
             beginGame()
+        }
+    }
+    
+    func wiggleHint() {
+        if (level.possibleSwaps.count > 0) {
+            let swap = level.possibleSwaps.randomElement()
+            swap?.candyA.wiggle()
+            swap?.candyB.wiggle()
         }
     }
 
