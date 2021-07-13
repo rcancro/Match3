@@ -147,4 +147,17 @@ class Candy: CustomStringConvertible, Hashable {
             }
         }
     }
+    
+    func wiggle() {
+        if let sprite = sprite {
+            let shortDuration: TimeInterval = 0.1
+            let longDuration: TimeInterval = 0.2
+            let rotateForward10Action = SKAction.rotate(byAngle: 0.15, duration: shortDuration)
+            let rotateForward20Action = SKAction.rotate(byAngle: 0.3, duration: longDuration)
+            let rotateBackward10Action = SKAction.rotate(byAngle: -0.15, duration: shortDuration)
+            let rotateBackward20Action = SKAction.rotate(byAngle: -0.3, duration: longDuration)
+            let actions = SKAction.sequence([rotateForward10Action, rotateBackward20Action, rotateForward20Action, rotateBackward10Action])
+            sprite.run(actions)
+        }
+    }
 }

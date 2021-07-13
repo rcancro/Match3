@@ -12,10 +12,11 @@ let numRows = 10
 
 class Level {
     private var candies = Array2D<Candy>(columns: numColumns, rows: numRows, initialValue: nil)
-    private var possibleSwaps: Set<Swap> = []
+    var possibleSwaps: Set<Swap> = []
     private var comboMultiplier = 1
     let baseLevelTime: TimeInterval = 30
     let shufflePenalityTime: TimeInterval = -5
+    let hintDelayTime: TimeInterval = 6
     private var comboTimeMultiplier = 1.0
     
     func candy(atColumn column: Int, row: Int) -> Candy? {
