@@ -9,17 +9,14 @@ import SpriteKit
 
 extension SKAction {
     static let burstAudioActions = [
-        SKAction.playSoundFileNamed("impactMetal_light_000", waitForCompletion: false),
-        SKAction.playSoundFileNamed("impactMetal_light_001", waitForCompletion: false),
-        SKAction.playSoundFileNamed("impactMetal_light_002", waitForCompletion: false),
-        SKAction.playSoundFileNamed("impactMetal_light_003", waitForCompletion: false),
-        SKAction.playSoundFileNamed("impactMetal_light_004", waitForCompletion: false)
+        SKAction.playSoundFileNamed("impactGlass_light_004", waitForCompletion: false),
+        SKAction.playSoundFileNamed("impactGlass_light_003", waitForCompletion: false),
+        SKAction.playSoundFileNamed("impactGlass_light_002", waitForCompletion: false),
+        SKAction.playSoundFileNamed("impactGlass_light_001", waitForCompletion: false)
     ]
 
-    static var randomBurstSound: SKAction {
-        guard let randomSoundAction = Self.burstAudioActions.randomElement() else {
-            fatalError("Audio files not setup properly.")
-        }
-        return randomSoundAction
+    static func burstSound(comboLevel: Int) -> SKAction {
+        let level = comboLevel >= burstAudioActions.count ? burstAudioActions.count - 1 : comboLevel
+        return burstAudioActions[level]
     }
 }

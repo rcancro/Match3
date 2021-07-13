@@ -70,7 +70,7 @@ class GameViewController: UIViewController {
         level = Level()
         
         // preload our sounds
-        let _ = SKAction.randomBurstSound
+        let _ = SKAction.burstSound(comboLevel: 0)
 
         scoreLabel.font = customFont(ofSize: 16)
         scoreLabel.text = "SCORE"
@@ -201,6 +201,10 @@ class GameViewController: UIViewController {
     }
 
     func handleMatches() {
+        handleMatches(comboLevel: 0)
+    }
+
+    func handleMatches(comboLevel: Int) {
         let chains = level.removeMatches()
         
         if chains.count == 0 {
@@ -209,7 +213,7 @@ class GameViewController: UIViewController {
         }
         
         restartHintTimer()
-        scene.animateMatchedCandies(for: chains) {
+        scene.animateMatchedCandies(for: chains, comboLevel: comboLevel) {
             for chain in chains {
                 self.score += chain.score
                 self.timeValueLabel.addTime(duration: chain.bonusTime)
@@ -218,7 +222,7 @@ class GameViewController: UIViewController {
             let fallingColumns = self.level.fillHoles()
             let newColumns = self.level.topUpCookies()
             self.scene.animate(fallingCandies: fallingColumns, newCandies: newColumns) {
-                self.handleMatches()
+                self.handleMatches(comboLevel: comboLevel + 1)
             }
         }
     }

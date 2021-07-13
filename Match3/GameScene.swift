@@ -208,8 +208,8 @@ class GameScene: SKScene {
         spriteB.run(SKAction.sequence([moveB, moveA]))
     }
     
-    func animateMatchedCandies(for chains: Set<Chain>, completion: @escaping () -> Void) {
-        var burst = [SKAction.randomBurstSound]
+    func animateMatchedCandies(for chains: Set<Chain>, comboLevel: Int, completion: @escaping () -> Void) {
+        var burst = [SKAction.burstSound(comboLevel: comboLevel)]
         for chain in chains {
             animateScore(for: chain)
             for candy in chain.candies {
