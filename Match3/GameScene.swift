@@ -12,6 +12,8 @@ class GameScene: SKScene {
     
     var level: Level!
     
+    var timerLabel = CountdownLabel()
+    var addTimeButton = SKLabelNode()
     let topBarYOffset: CGFloat = 70
     
     let tileWidth: CGFloat = 48.0
@@ -24,7 +26,6 @@ class GameScene: SKScene {
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     var swipeHandler: ((Swap) -> Void)?
-    
     
     var currentChain = [Candy]()
     var lastElementInChain: Candy? {
@@ -44,6 +45,10 @@ class GameScene: SKScene {
         
         candiesLayer.position = layerPosition
         gameLayer.addChild(candiesLayer)
+    }
+    
+    func clearSprites() {
+        candiesLayer.removeAllChildren()
     }
 
     func addSprites(for candies: Set<Candy>) {
@@ -168,9 +173,6 @@ class GameScene: SKScene {
         }
     }
     
-    func gameOver() {
-    }
-
 // MARK: - Animations
     
     func animate(_ swap: Swap, completion: @escaping () -> Void) {
@@ -211,6 +213,7 @@ class GameScene: SKScene {
     }
     
     func animateMatchedCandies(for chains: Set<Chain>, completion: @escaping () -> Void) {
+        var burst = [SKAction.randomBurstSound]
         for chain in chains {
             animateScore(for: chain)
             for candy in chain.candies {
@@ -218,8 +221,9 @@ class GameScene: SKScene {
                     if sprite.action(forKey: "removing") == nil {
                         let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
                         scaleAction.timingMode = .easeOut
-                        sprite.run(SKAction.sequence([scaleAction, SKAction.removeFromParent()]),
+                        sprite.run(SKAction.sequence(burst + [scaleAction, SKAction.removeFromParent()]),
                                    withKey: "removing")
+                        burst = [] // Only add one sound action for the chain.
                     }
                 }
             }

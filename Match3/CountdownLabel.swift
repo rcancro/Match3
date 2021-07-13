@@ -31,12 +31,6 @@ class CountdownLabel: UILabel {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] timer in
                 guard let strongSelf = self else { return }
                 strongSelf.remainingTime = max(0, strongSelf.remainingTime - 1)
-                if strongSelf.remainingTime <= 10 {
-                    strongSelf.textColor = strongSelf.timeRunningOutColor
-                } else {
-                    strongSelf.textColor = .white
-                }
-                
                 strongSelf.updateText()
                 strongSelf.bumpAnimation()
                 
@@ -60,6 +54,11 @@ class CountdownLabel: UILabel {
     }
     
     func updateText() {
+        if remainingTime > 10 {
+            textColor = .white
+        } else {
+            textColor = timeRunningOutColor
+        }
         text = "\(Int(remainingTime))"
     }
 
