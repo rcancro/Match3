@@ -66,15 +66,8 @@ class GameViewController: UIViewController {
     
     func handleSwipe(_ swap: Swap) {
         view.isUserInteractionEnabled = false
-        
-        if level.isPossibleSwap(swap) {
-            level.performSwap(swap)
-            scene.animate(swap, completion: handleMatches)
-        } else {
-            scene.animateInvalidSwap(swap) {
-              self.view.isUserInteractionEnabled = true
-            }
-        }
+        level.performSwap(swap)
+        scene.animate(swap, completion: handleMatches)
     }
 
     func handleMatches() {
@@ -95,7 +88,6 @@ class GameViewController: UIViewController {
     }
 
     func beginNextTurn() {
-        level.detectPossibleSwaps()
         view.isUserInteractionEnabled = true
     }
 

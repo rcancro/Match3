@@ -22,10 +22,7 @@ class Level {
     
     func shuffle() -> Set<Candy> {
         var set: Set<Candy>
-        repeat {
-            set = createInitialCookies()
-            detectPossibleSwaps()
-        } while possibleSwaps.count == 0
+        set = createInitialCookies()
         
         return set
     }
@@ -68,69 +65,6 @@ class Level {
             verticalLength += 1
         }
         return verticalLength >= 3
-    }
-    
-    func detectPossibleSwaps() {
-        var set: Set<Swap> = []
-        
-        for row in 0..<numRows {
-            for column in 0..<numColumns {
-                if let candy = candies[column, row] {
-                    if column < numColumns - 1,
-                       let other = candies[column + 1, row] {
-                        // Swap them
-                        candies[column, row] = other
-                        candies[column + 1, row] = candy
-                        
-                        // Is either cookie now part of a chain?
-                        if hasChain(atColumn: column + 1, row: row) ||
-                            hasChain(atColumn: column, row: row) {
-                            set.insert(Swap(candyA: candy, candyB: other))
-                        }
-                        
-                        // Swap them back
-                        candies[column, row] = candy
-                        candies[column + 1, row] = other
-                    }
-                    
-                    if row < numRows - 1,
-                       let other = candies[column, row + 1] {
-                        candies[column, row] = other
-                        candies[column, row + 1] = candy
-                        
-                        // Is either cookie now part of a chain?
-                        if hasChain(atColumn: column, row: row + 1) ||
-                            hasChain(atColumn: column, row: row) {
-                            set.insert(Swap(candyA: candy, candyB: other))
-                        }
-                        
-                        // Swap them back
-                        candies[column, row] = candy
-                        candies[column, row + 1] = other
-                    }
-                }
-                else if column == numColumns - 1, let candy = candies[column, row] {
-                    if row < numRows - 1,
-                       let other = candies[column, row + 1] {
-                        candies[column, row] = other
-                        candies[column, row + 1] = candy
-                        
-                        // Is either cookie now part of a chain?
-                        if hasChain(atColumn: column, row: row + 1) ||
-                            hasChain(atColumn: column, row: row) {
-                            set.insert(Swap(candyA: candy, candyB: other))
-                        }
-                        
-                        // Swap them back
-                        candies[column, row] = candy
-                        candies[column, row + 1] = other
-                    }
-                    
-                }
-            }
-        }
-        
-        possibleSwaps = set
     }
     
     private func detectHorizontalMatches() -> Set<Chain> {
