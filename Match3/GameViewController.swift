@@ -42,7 +42,6 @@ class GameViewController: UIViewController {
         scene.level = level
         scene.backgroundColor = .purple
         scene.swipeHandler = handleSwipe
-        
         // Present the scene.
         skView.presentScene(scene)
         beginGame()
