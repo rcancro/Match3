@@ -205,7 +205,7 @@ class GameScene: SKScene {
     func setupTimerLabel(){
         timerLabel.startWithDuration(duration: 10)
         timerLabel.update()
-        timerLabel.fontName = "ChalkboardSE-Bold"
+        timerLabel.fontName = "Kenney-Future-Square"
         timerLabel.fontSize = 30
         timerLabel.fontColor = SKColor.white
         timerLabel.position = CGPoint(x: frame.midX, y: frame.maxY - topBarYOffset)
@@ -215,7 +215,7 @@ class GameScene: SKScene {
     func setupAddTimeButton(){
         let padding = 30.0
 
-        addTimeButton = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+        addTimeButton = SKLabelNode(fontNamed: "Kenney-Future-Square")
         addTimeButton.fontSize = 16
         addTimeButton.text = "Add time"
         addTimeButton.position = CGPoint(x: frame.maxX - CGFloat(padding) - addTimeButton.frame.size.width / 2, y: frame.maxY - topBarYOffset)
