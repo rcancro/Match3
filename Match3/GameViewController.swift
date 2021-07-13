@@ -41,6 +41,7 @@ class GameViewController: UIViewController {
         level = Level()
         scene.level = level
         scene.backgroundColor = .purple
+        scene.swipeHandler = handleSwipe
         
         // Present the scene.
         skView.presentScene(scene)
@@ -62,4 +63,40 @@ class GameViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    func handleSwipe(_ swap: Swap) {
+        view.isUserInteractionEnabled = false
+        
+        if level.isPossibleSwap(swap) {
+            level.performSwap(swap)
+            scene.animate(swap, completion: handleMatches)
+        } else {
+            scene.animateInvalidSwap(swap) {
+              self.view.isUserInteractionEnabled = true
+            }
+        }
+    }
+
+    func handleMatches() {
+        let chains = level.removeMatches()
+        
+        if chains.count == 0 {
+            beginNextTurn()
+            return
+        }
+        
+        scene.animateMatchedCandies(for: chains) {
+            let fallingColumns = self.level.fillHoles()
+            let newColumns = self.level.topUpCookies()
+            self.scene.animate(fallingCandies: fallingColumns, newCandies: newColumns) {
+                self.handleMatches()
+            }
+        }
+    }
+
+    func beginNextTurn() {
+        level.detectPossibleSwaps()
+        view.isUserInteractionEnabled = true
+    }
+
 }

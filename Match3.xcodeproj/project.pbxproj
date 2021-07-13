@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C169399269D43A2007FA97A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C169398269D43A2007FA97A /* Swap.swift */; };
+		9C16939B269D4940007FA97A /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C16939A269D4940007FA97A /* Chain.swift */; };
 		9C3C60E7269BC27400EB5B61 /* SKAction+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C60E6269BC27400EB5B61 /* SKAction+Spring.swift */; };
 		9C858A2A269CA81A0052689D /* Array+Candy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C858A29269CA81A0052689D /* Array+Candy.swift */; };
 		9C858A2C269CAACB0052689D /* Array2D+Candy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C858A2B269CAACB0052689D /* Array2D+Candy.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9C169398269D43A2007FA97A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
+		9C16939A269D4940007FA97A /* Chain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 		9C3C60E6269BC27400EB5B61 /* SKAction+Spring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKAction+Spring.swift"; sourceTree = "<group>"; };
 		9C858A29269CA81A0052689D /* Array+Candy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Candy.swift"; sourceTree = "<group>"; };
 		9C858A2B269CAACB0052689D /* Array2D+Candy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array2D+Candy.swift"; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 				9C3C60E6269BC27400EB5B61 /* SKAction+Spring.swift */,
 				9C858A29269CA81A0052689D /* Array+Candy.swift */,
 				9C858A2B269CAACB0052689D /* Array2D+Candy.swift */,
+				9C169398269D43A2007FA97A /* Swap.swift */,
+				9C16939A269D4940007FA97A /* Chain.swift */,
 			);
 			path = Match3;
 			sourceTree = "<group>";
@@ -154,7 +160,9 @@
 				9CD4180C269B8ABE00C3F7A0 /* GameScene.swift in Sources */,
 				9C3C60E7269BC27400EB5B61 /* SKAction+Spring.swift in Sources */,
 				9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */,
+				9C16939B269D4940007FA97A /* Chain.swift in Sources */,
 				9CD4181B269B8D7900C3F7A0 /* Candy.swift in Sources */,
+				9C169399269D43A2007FA97A /* Swap.swift in Sources */,
 				9CD4181D269B9D7200C3F7A0 /* Level.swift in Sources */,
 				9C858A2A269CA81A0052689D /* Array+Candy.swift in Sources */,
 				9CD4180E269B8ABE00C3F7A0 /* GameViewController.swift in Sources */,

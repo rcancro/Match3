@@ -18,7 +18,11 @@ class GameScene: SKScene {
     
     let gameLayer = SKNode()
     let candiesLayer = SKNode()
-    var suppressTouches = false
+    
+    private var swipeFromColumn: Int?
+    private var swipeFromRow: Int?
+    var swipeHandler: ((Swap) -> Void)?
+    
     
     var currentChain = [Candy]()
     var lastElementInChain: Candy? {
@@ -35,7 +39,7 @@ class GameScene: SKScene {
         let layerPosition = CGPoint(
             x: (size.width - (allTilesWidth + allSpacingWidth))/2.0,
             y: 60)
-
+        
         candiesLayer.position = layerPosition
         gameLayer.addChild(candiesLayer)
     }
@@ -45,7 +49,7 @@ class GameScene: SKScene {
             addSprite(for: candy)
         }
     }
-
+    
     func addSprite(for candy: Candy) {
         let sprite = SKSpriteNode(imageNamed: candy.candyType.spriteName)
         sprite.size = CGSize(width: tileWidth, height: tileHeight)
@@ -53,18 +57,18 @@ class GameScene: SKScene {
         candiesLayer.addChild(sprite)
         candy.sprite = sprite
     }
-
+    
     
     private func pointFor(column: Int, row: Int) -> CGPoint {
         return CGPoint(
             x: (CGFloat(column) * tileWidth) + (tileWidth / 2) + (CGFloat(column) * tileSpacing),
             y: (CGFloat(row) * tileHeight) + (tileHeight / 2) + (CGFloat(row) * tileSpacing))
     }
-
+    
     private func convertPoint(_ point: CGPoint) -> (success: Bool, column: Int, row: Int) {
         let totalWidth = (CGFloat(numColumns) * tileWidth) + (CGFloat(numColumns - 1) * tileSpacing)
         let totalHeight = (CGFloat(numRows) * tileHeight) + (CGFloat(numRows - 1) * tileSpacing)
-
+        
         if point.x >= 0 && point.x < totalWidth &&
             point.y >= 0 && point.y < totalHeight {
             
@@ -73,7 +77,7 @@ class GameScene: SKScene {
             if remainderX > tileWidth || remainderY > tileHeight{
                 return (false, 0, 0)  // we are in the spacing
             }
-
+            
             return (true, Int(point.x / (tileWidth + tileSpacing)), Int(point.y / (tileHeight + tileSpacing)))
         } else {
             return (false, 0, 0)  // invalid location
@@ -84,54 +88,67 @@ class GameScene: SKScene {
         guard let touch = touches.first else { return }
         let location = touch.location(in: candiesLayer)
         let (success, column, row) = convertPoint(location)
-        
-        if success, let candy = level.candy(atColumn: column, row: row) {
-            currentChain.append(candy)
-            candy.highlight(true, atChainPosition: currentChain.count)
+        if success {
+            if let cookie = level.candy(atColumn: column, row: row) {
+                swipeFromColumn = column
+                swipeFromRow = row
+            }
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard !suppressTouches, let touch = touches.first else { return }
+        guard swipeFromColumn != nil else { return }
+        guard let touch = touches.first else { return }
         let location = touch.location(in: candiesLayer)
+        
         let (success, column, row) = convertPoint(location)
-        if success, let candy = level.candy(atColumn: column, row: row) {
-            if candy.candyType != lastElementInChain!.candyType {
-                endTouches()
-                suppressTouches = true
-            } else if currentChain.contains(candy), candy != lastElementInChain {
-                endTouches()
-                suppressTouches = true
-            } else if !currentChain.contains(candy) && candy.isValidLocationForChain(currentChain){
-                currentChain.append(candy)
-                candy.highlight(true, atChainPosition: currentChain.count)
+        if success {
+            var horizontalDelta = 0, verticalDelta = 0
+            if column < swipeFromColumn! {          // swipe left
+                horizontalDelta = -1
+            } else if column > swipeFromColumn! {   // swipe right
+                horizontalDelta = 1
+            } else if row < swipeFromRow! {         // swipe down
+                verticalDelta = -1
+            } else if row > swipeFromRow! {         // swipe up
+                verticalDelta = 1
+            }
+            
+            if horizontalDelta != 0 || verticalDelta != 0 {
+                trySwap(horizontalDelta: horizontalDelta, verticalDelta: verticalDelta)
+                swipeFromColumn = nil
             }
         }
     }
-
+    
+    private func trySwap(horizontalDelta: Int, verticalDelta: Int) {
+        
+        let toColumn = swipeFromColumn! + horizontalDelta
+        let toRow = swipeFromRow! + verticalDelta
+        
+        guard toColumn >= 0 && toColumn < numColumns else { return }
+        guard toRow >= 0 && toRow < numRows else { return }
+        
+        if let toCandy = level.candy(atColumn: toColumn, row: toRow),
+           let fromCandy = level.candy(atColumn: swipeFromColumn!, row: swipeFromRow!) {
+            if let handler = swipeHandler {
+                let swap = Swap(candyA: fromCandy, candyB: toCandy)
+                handler(swap)
+            }            
+        }
+    }
+    
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        suppressTouches = false
         endTouches()
     }
-
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        suppressTouches = false
         endTouches()
     }
     
     func endTouches() {
-        // check to see if we have a chain.
-        if currentChain.isValidChain() {
-            // we matched, let's play some crazy animation
-            currentChain.matchChain { [weak self] candy in
-                guard let strongSelf = self else { return }
-                strongSelf.cleanUpMatch(candy)
-            }
-        } else {
-            // no match, lets deselect
-            currentChain.deselectChain()
-        }
-        currentChain = [Candy]()
+        swipeFromColumn = nil
+        swipeFromRow = nil
     }
     
     func cleanUpMatch(_ candy: Candy) {
@@ -143,10 +160,118 @@ class GameScene: SKScene {
             replacement.fadeIn()
         }
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    func animate(_ swap: Swap, completion: @escaping () -> Void) {
+        let spriteA = swap.candyA.sprite!
+        let spriteB = swap.candyB.sprite!
+        
+        spriteA.zPosition = 100
+        spriteB.zPosition = 90
+        
+        let duration: TimeInterval = 0.3
+        
+        let moveA = SKAction.move(to: spriteB.position, duration: duration)
+        moveA.timingMode = .easeOut
+        spriteA.run(moveA, completion: completion)
+        
+        let moveB = SKAction.move(to: spriteA.position, duration: duration)
+        moveB.timingMode = .easeOut
+        spriteB.run(moveB)
+    }
+    
+    func animateInvalidSwap(_ swap: Swap, completion: @escaping () -> Void) {
+        let spriteA = swap.candyA.sprite!
+        let spriteB = swap.candyB.sprite!
+        
+        spriteA.zPosition = 100
+        spriteB.zPosition = 90
+        
+        let duration: TimeInterval = 0.2
+        
+        let moveA = SKAction.move(to: spriteB.position, duration: duration)
+        moveA.timingMode = .easeOut
+        
+        let moveB = SKAction.move(to: spriteA.position, duration: duration)
+        moveB.timingMode = .easeOut
+        
+        spriteA.run(SKAction.sequence([moveA, moveB]), completion: completion)
+        spriteB.run(SKAction.sequence([moveB, moveA]))
+    }
+    
+    func animateMatchedCandies(for chains: Set<Chain>, completion: @escaping () -> Void) {
+        for chain in chains {
+            for candy in chain.candies {
+                if let sprite = candy.sprite {
+                    if sprite.action(forKey: "removing") == nil {
+                        let scaleAction = SKAction.scale(to: 0.1, duration: 0.3)
+                        scaleAction.timingMode = .easeOut
+                        sprite.run(SKAction.sequence([scaleAction, SKAction.removeFromParent()]),
+                                   withKey: "removing")
+                    }
+                }
+            }
+        }
+        
+        run(SKAction.wait(forDuration: 0.3), completion: completion)
+    }
+    
+    func animate(fallingCandies: [[Candy]], newCandies: [[Candy]], completion: @escaping () -> Void) {
+        
+        animateFallingCandies(in: fallingCandies) {
+            
+        }
+        
+        animateNewCandies(in: newCandies, completion: completion)
+    }
+    
+    static let fallingCandyDuration: TimeInterval = 0.8
+    
+    func animateFallingCandies(in columns: [[Candy]], completion: @escaping () -> Void) {
+        
+        for array in columns {
+            for (_, candy) in array.enumerated() {
+                let newPosition = pointFor(column: candy.column, row: candy.row)
+                let sprite = candy.sprite!   // sprite always exists at this point
+                
+                let moveAction = SKAction.move(to: newPosition, duration: GameScene.fallingCandyDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0)
+                sprite.run(moveAction)
+            }
+        }
+        
+        run(SKAction.wait(forDuration: GameScene.fallingCandyDuration), completion: completion)
+    }
+    
+    func animateNewCandies(in columns: [[Candy]], completion: @escaping () -> Void) {
+        
+        for array in columns {
+            let startRow = array[0].row + 1
+            
+            for (_, candy) in array.enumerated() {
+                
+                let sprite = SKSpriteNode(imageNamed: candy.candyType.spriteName)
+                sprite.size = CGSize(width: tileWidth, height: tileHeight)
+                sprite.position = pointFor(column: candy.column, row: startRow)
+                candiesLayer.addChild(sprite)
+                candy.sprite = sprite
+                
+                let newPosition = pointFor(column: candy.column, row: candy.row)
+                let moveAction = SKAction.move(to: newPosition, duration: GameScene.fallingCandyDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0)
+                sprite.alpha = 0
+                sprite.run(
+                    SKAction.sequence([
+                        SKAction.group([
+                                        SKAction.fadeIn(withDuration: 0.05),
+                                        moveAction])
+                    ]))
+            }
+        }
+        
+        run(SKAction.wait(forDuration: GameScene.fallingCandyDuration), completion: completion)
+    }
 }
 
