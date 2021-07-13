@@ -15,8 +15,13 @@ class GameViewController: UIViewController {
     var scene: GameScene!
     var skView: SKView!
     
+    let scoreLabel = UILabel()
+    let scoreValueLabel = UILabel()
+    var score = 0
+
     func beginGame() {
-      shuffle()
+        level.resetComboMultiplier()
+        shuffle()
     }
 
     func shuffle() {
@@ -24,12 +29,29 @@ class GameViewController: UIViewController {
       scene.addSprites(for: newCookies)
     }
     
+    private func customFont(ofSize size: CGFloat) -> UIFont {
+        return UIFont(name: "Kenney-Future-Square", size: size) ?? UIFont.systemFont(ofSize: size)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         skView = SKView(frame: view.bounds)
         view.addSubview(skView)
-        
+
+        scoreLabel.font = customFont(ofSize: 16)
+        scoreLabel.text = "SCORE"
+        scoreLabel.textAlignment = .center
+        scoreLabel.textColor = .white
+
+        view.addSubview(scoreLabel)
+        scoreValueLabel.font = customFont(ofSize: 18)
+        view.addSubview(scoreValueLabel)
+        scoreValueLabel.adjustsFontSizeToFitWidth = true
+        scoreValueLabel.text = "0"
+        scoreValueLabel.textAlignment = .center
+        scoreValueLabel.textColor = .white
+
         skView.ignoresSiblingOrder = true
         skView.showsFPS = true
         skView.showsNodeCount = true
@@ -48,19 +70,43 @@ class GameViewController: UIViewController {
     }
     
     override var shouldAutorotate: Bool {
-        return true
+        return false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+        return .portrait
     }
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        let xMargins: CGFloat = 16
+        let yMargins: CGFloat = 4
+        let labelPadding: CGFloat = 2
+        let maxScoreWidth = view.frame.width * 0.3
+        let scoreSize = scoreLabel.sizeThatFits(CGSize(width: maxScoreWidth, height: 80000))
+        scoreLabel.frame = CGRect(x: xMargins, y: view.safeAreaInsets.top + yMargins, width: maxScoreWidth, height: scoreSize.height)
+        
+        let scoreValueSize = scoreValueLabel.sizeThatFits(CGSize(width: maxScoreWidth, height: 80000))
+        scoreValueLabel.frame = CGRect(x: xMargins, y: scoreLabel.frame.maxY + labelPadding, width: maxScoreWidth, height: scoreValueSize.height)
+    }
+    
+    private func updateLabels(animated: Bool) {
+        self.scoreValueLabel.text = "\(score)"
+        
+        if animated {
+            UIView.animate(withDuration: 0.15) {
+                self.scoreValueLabel.transform = CGAffineTransform.init(scaleX: 1.2, y: 1.2)
+            } completion: { finished in
+                UIView.animate(withDuration: 0.15) {
+                    self.scoreValueLabel.transform = CGAffineTransform.init(scaleX: 1.0, y: 1.0)
+                }
+            }
+        }
     }
     
     func handleSwipe(_ swap: Swap) {
@@ -85,6 +131,11 @@ class GameViewController: UIViewController {
         }
         
         scene.animateMatchedCandies(for: chains) {
+            for chain in chains {
+              self.score += chain.score
+            }
+            self.updateLabels(animated: true)
+            
             let fallingColumns = self.level.fillHoles()
             let newColumns = self.level.topUpCookies()
             self.scene.animate(fallingCandies: fallingColumns, newCandies: newColumns) {
@@ -94,6 +145,7 @@ class GameViewController: UIViewController {
     }
 
     func beginNextTurn() {
+        level.resetComboMultiplier()
         level.detectPossibleSwaps()
         view.isUserInteractionEnabled = true
     }

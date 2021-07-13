@@ -28,6 +28,32 @@ enum CandyType: Int, CaseIterable {
         return spriteNames[rawValue - 1]
     }
     
+    var associatedColor: UIColor {
+        switch self {
+        case .smartie:
+            return .green
+        case .MAndM:
+            return .blue
+        case .candyCorn:
+            return .red
+        case .lollipop:
+            return .orange
+        case .hardCandy:
+            return .systemPink
+        case .tootsie:
+            return .brown
+        case .unknown:
+            return .white
+        }
+    }
+    
+    var baseScore: Int {
+        if self == .candyCorn {
+            return 0
+        }
+        return 50
+    }
+    
     var highlightedSpriteName: String {
         return spriteName + "-highlighted"
     }

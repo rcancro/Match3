@@ -43,5 +43,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Kenney Bold.ttf</string>
+		<string>Kenney Future Square.ttf</string>
+	</array>
 </dict>
 </plist>

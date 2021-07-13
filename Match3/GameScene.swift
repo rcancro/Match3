@@ -99,7 +99,7 @@ class GameScene: SKScene {
         let location = touch.location(in: candiesLayer)
         let (success, column, row) = convertPoint(location)
         if success {
-            if let cookie = level.candy(atColumn: column, row: row) {
+            if let _ = level.candy(atColumn: column, row: row) {
                 swipeFromColumn = column
                 swipeFromRow = row
             }
@@ -268,6 +268,7 @@ class GameScene: SKScene {
     
     func animateMatchedCandies(for chains: Set<Chain>, completion: @escaping () -> Void) {
         for chain in chains {
+            animateScore(for: chain)
             for candy in chain.candies {
                 if let sprite = candy.sprite {
                     if sprite.action(forKey: "removing") == nil {
@@ -279,7 +280,6 @@ class GameScene: SKScene {
                 }
             }
         }
-        
         run(SKAction.wait(forDuration: 0.3), completion: completion)
     }
     
@@ -337,11 +337,35 @@ class GameScene: SKScene {
         run(SKAction.wait(forDuration: GameScene.fallingCandyDuration), completion: completion)
     }
 
+    func animateScore(for chain: Chain) {
+        // Figure out what the midpoint of the chain is.
+        let firstSprite = chain.firstCandy().sprite!
+        let lastSprite = chain.lastCandy().sprite!
+        let centerPosition = CGPoint(
+            x: (firstSprite.position.x + lastSprite.position.x)/2,
+            y: (firstSprite.position.y + lastSprite.position.y)/2 - 8)
+        
+        let scoreLabel = SKLabelNode(fontNamed: "Kenney-Bold")
+        scoreLabel.fontSize = 16
+        scoreLabel.position = centerPosition
+        scoreLabel.zPosition = 300
+        scoreLabel.text = "\(chain.score)"
+        scoreLabel.fontColor = chain.firstCandy().candyType.associatedColor
+        scoreLabel.xScale = 0
+        scoreLabel.yScale = 0
+        candiesLayer.addChild(scoreLabel)
+        
+        let scaleAction = SKAction.scale(to: 1.5, duration: 1, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0)
+        let fadeAction = SKAction.fadeAlpha(to: 0.0, duration: 1)
+        let groupAction = SKAction.group([scaleAction, fadeAction])
+        scoreLabel.run(SKAction.sequence([groupAction, SKAction.removeFromParent()]))
+    }
+
 // MARK: - Misc
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
 }
 

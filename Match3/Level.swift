@@ -7,12 +7,13 @@
 
 import SpriteKit
 
-let numColumns = 7
-let numRows = 11
+let numColumns = 6
+let numRows = 10
 
 class Level {
     private var candies = Array2D<Candy>(columns: numColumns, rows: numRows, initialValue: nil)
     private var possibleSwaps: Set<Swap> = []
+    private var comboMultiplier = 1
     
     func candy(atColumn column: Int, row: Int) -> Candy? {
         precondition(column >= 0 && column < numColumns)
@@ -191,12 +192,30 @@ class Level {
         return set
     }
     
+    func resetComboMultiplier() {
+        comboMultiplier = 0
+    }
+    
+    private func calculateScores(for chains: Set<Chain>) {
+        for chain in chains {
+            let baseScore = chain.firstCandy().candyType.baseScore
+            let scoreChainLength = chain.length - 2
+            // be fancy and shift for 2^comboMultiplier because pow() keeps complaing to me
+            chain.score = baseScore * scoreChainLength * scoreChainLength * (2 << comboMultiplier)
+            // cap the multiplier
+            comboMultiplier = min(comboMultiplier + 1, 7)
+        }
+    }
+    
     func removeMatches() -> Set<Chain> {
         let horizontalChains = detectHorizontalMatches()
         let verticalChains = detectVerticalMatches()
         
         removeCandies(in: horizontalChains)
         removeCandies(in: verticalChains)
+        
+        calculateScores(for: horizontalChains)
+        calculateScores(for: verticalChains)
         
         return horizontalChains.union(verticalChains)
     }
