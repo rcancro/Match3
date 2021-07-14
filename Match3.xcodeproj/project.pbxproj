@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4A47F1D7269D018D00EC070B /* CountdownLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D6269D018D00EC070B /* CountdownLabel.swift */; };
 		4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */; };
+		9C09CBCB269EAC4E00F1299E /* Kenney Mini Square.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */; };
 		9C169399269D43A2007FA97A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C169398269D43A2007FA97A /* Swap.swift */; };
 		9C16939B269D4940007FA97A /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C16939A269D4940007FA97A /* Chain.swift */; };
 		9C1693A2269E86D0007FA97A /* combo2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C16939C269E86CF007FA97A /* combo2.wav */; };
@@ -20,8 +21,6 @@
 		9C3C60E7269BC27400EB5B61 /* SKAction+Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C60E6269BC27400EB5B61 /* SKAction+Spring.swift */; };
 		9C858A2A269CA81A0052689D /* Array+Candy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C858A29269CA81A0052689D /* Array+Candy.swift */; };
 		9C858A2C269CAACB0052689D /* Array2D+Candy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C858A2B269CAACB0052689D /* Array2D+Candy.swift */; };
-		9CAED692269E31C10020E9AA /* Kenney Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CAED690269E31C10020E9AA /* Kenney Bold.ttf */; };
-		9CAED693269E31C10020E9AA /* Kenney Future Square.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CAED691269E31C10020E9AA /* Kenney Future Square.ttf */; };
 		9CAED69B269E4A090020E9AA /* pinny.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 9CAED69A269E4A090020E9AA /* pinny.atlas */; };
 		9CAED69D269E4DF90020E9AA /* Pinny.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAED69C269E4DF90020E9AA /* Pinny.swift */; };
 		9CD41806269B8ABE00C3F7A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD41805269B8ABE00C3F7A0 /* AppDelegate.swift */; };
@@ -38,6 +37,7 @@
 /* Begin PBXFileReference section */
 		4A47F1D6269D018D00EC070B /* CountdownLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownLabel.swift; sourceTree = "<group>"; };
 		4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverOverlay.swift; sourceTree = "<group>"; };
+		9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Mini Square.ttf"; sourceTree = "<group>"; };
 		9C169398269D43A2007FA97A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		9C16939A269D4940007FA97A /* Chain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 		9C16939C269E86CF007FA97A /* combo2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = combo2.wav; sourceTree = "<group>"; };
@@ -49,8 +49,6 @@
 		9C3C60E6269BC27400EB5B61 /* SKAction+Spring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKAction+Spring.swift"; sourceTree = "<group>"; };
 		9C858A29269CA81A0052689D /* Array+Candy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Candy.swift"; sourceTree = "<group>"; };
 		9C858A2B269CAACB0052689D /* Array2D+Candy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array2D+Candy.swift"; sourceTree = "<group>"; };
-		9CAED690269E31C10020E9AA /* Kenney Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Bold.ttf"; sourceTree = "<group>"; };
-		9CAED691269E31C10020E9AA /* Kenney Future Square.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Future Square.ttf"; sourceTree = "<group>"; };
 		9CAED69A269E4A090020E9AA /* pinny.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; name = pinny.atlas; path = Assets.xcassets/pinny.atlas; sourceTree = "<group>"; };
 		9CAED69C269E4DF90020E9AA /* Pinny.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pinny.swift; sourceTree = "<group>"; };
 		9CD41802269B8ABE00C3F7A0 /* Match3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Match3.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,8 +78,7 @@
 		9C858A2D269E05CE0052689D /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				9CAED690269E31C10020E9AA /* Kenney Bold.ttf */,
-				9CAED691269E31C10020E9AA /* Kenney Future Square.ttf */,
+				9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -200,7 +197,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CAED692269E31C10020E9AA /* Kenney Bold.ttf in Resources */,
 				9CAED69B269E4A090020E9AA /* pinny.atlas in Resources */,
 				9C1693A5269E86D0007FA97A /* combo1.wav in Resources */,
 				9C1693A7269E86D0007FA97A /* combo6.wav in Resources */,
@@ -209,7 +205,7 @@
 				9CD41813269B8AC100C3F7A0 /* Assets.xcassets in Resources */,
 				9C1693A4269E86D0007FA97A /* combo4.wav in Resources */,
 				9C1693A3269E86D0007FA97A /* combo3.wav in Resources */,
-				9CAED693269E31C10020E9AA /* Kenney Future Square.ttf in Resources */,
+				9C09CBCB269EAC4E00F1299E /* Kenney Mini Square.ttf in Resources */,
 				9CD41821269BA75D00C3F7A0 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

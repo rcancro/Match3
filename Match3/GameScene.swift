@@ -12,30 +12,77 @@ class GameScene: SKScene {
     
     var level: Level!
     
-    let tileWidth: CGFloat = 48.0
-    let tileHeight: CGFloat = 48.0
+    let tileWidth: CGFloat = 44.0
+    let tileHeight: CGFloat = 44.0
     let tileSpacing: CGFloat = 8.0
     
     let gameLayer = SKNode()
     let candiesLayer = SKNode()
+    var footerHeight: CGFloat {
+        return footerSprite.size.height
+    }
     
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     var swipeHandler: ((Swap) -> Void)?
     
+    let backgroundSprite = SKSpriteNode(imageNamed: "background")
+    let footerSprite = SKSpriteNode(imageNamed: "footer")
+    
     override init(size: CGSize) {
         super.init(size: size)
-        
         addChild(gameLayer)
+    }
+
+    override func didMove(to view: SKView) {
+        super.didMove(to: view)
+        backgroundSprite.anchorPoint = .zero
+        backgroundSprite.position = .zero
+        backgroundSprite.zPosition = -1
+        
+        footerSprite.centerRect = CGRect(x: 0.3, y: 0, width: 0.1, height: 0)
+        footerSprite.anchorPoint = .zero
+        footerSprite.position = .zero
+        footerSprite.zPosition = 0
+        footerSprite.size = CGSize(width: view.frame.width, height: footerSprite.size.height)
+        
+        let backgroundWidth = floor(((view.frame.height - footerSprite.size.height) * backgroundSprite.size.width)/backgroundSprite.size.height)
+        let backgroundHeight = floor((backgroundSprite.size.height * view.frame.width)/backgroundSprite.size.width)
+        let desiredBackgroundHeight = view.frame.height - footerSprite.size.height
+        
+        if backgroundWidth >= view.frame.width {
+            backgroundSprite.size = CGSize(width: backgroundWidth, height: desiredBackgroundHeight)
+            backgroundSprite.position = CGPoint(x: -(backgroundWidth - view.frame.width)/2.0, y: footerSprite.size.height)
+        } else if backgroundHeight >= desiredBackgroundHeight {
+            backgroundSprite.size = CGSize(width: view.frame.width, height: backgroundHeight)
+            backgroundSprite.position = CGPoint(x: 0, y: footerSprite.size.height - ((backgroundHeight - desiredBackgroundHeight)/2.0))
+        } else {
+            // i have no idea
+            assert(false, "oh no")
+        }
+        
+        gameLayer.addChild(backgroundSprite)
+        gameLayer.addChild(footerSprite)
         
         let allTilesWidth = tileWidth * CGFloat(numColumns)
         let allSpacingWidth = tileSpacing * CGFloat(numColumns-1)
+        let allTilesHeight = tileHeight * CGFloat(numRows)
+        let allSpacingHeight = tileSpacing * CGFloat(numRows - 1)
+
+        let underLayExtraPadding: CGFloat = 12
+        let underlayLayer = SKSpriteNode(color: .black.withAlphaComponent(0.4), size: CGSize(width: allTilesWidth + underLayExtraPadding + allSpacingWidth, height: allTilesHeight + allSpacingHeight + underLayExtraPadding))
+        underlayLayer.anchorPoint = .zero
+        
         let layerPosition = CGPoint(
             x: (size.width - (allTilesWidth + allSpacingWidth))/2.0,
-            y: 60)
+            y: footerSprite.size.height + 45) // TODO: we need to be flexible here for different phone sizes
         
         candiesLayer.position = layerPosition
+        underlayLayer.position = CGPoint(x: layerPosition.x - underLayExtraPadding/2.0, y: layerPosition.y - underLayExtraPadding/2.0)
+        gameLayer.addChild(underlayLayer)
         gameLayer.addChild(candiesLayer)
+
+        
     }
     
     func clearSprites(animted: Bool = false, completion: (()->Void)?) {
@@ -314,7 +361,7 @@ class GameScene: SKScene {
             x: (firstSprite.position.x + lastSprite.position.x)/2,
             y: (firstSprite.position.y + lastSprite.position.y)/2 - 8)
         
-        let scoreLabel = SKLabelNode(fontNamed: "Kenney-Bold")
+        let scoreLabel = SKLabelNode(fontNamed: "Kenney-Mini-Square")
         scoreLabel.fontSize = 16
         scoreLabel.position = centerPosition
         scoreLabel.zPosition = 300

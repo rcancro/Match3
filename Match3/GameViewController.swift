@@ -24,8 +24,7 @@ class GameViewController: UIViewController {
 
     let yMargins: CGFloat = 4
     
-    let shuffleLabel = UILabel()
-    var shuffleTapGestureRecognizer: UITapGestureRecognizer!
+    let shuffleButton = UIButton(type: .custom)
     
     var wiggleTimer = Timer()
     
@@ -62,7 +61,7 @@ class GameViewController: UIViewController {
     }
     
     private func customFont(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "Kenney-Future-Square", size: size) ?? UIFont.systemFont(ofSize: size)
+        return UIFont(name: "Kenney-Mini-Square", size: size) ?? UIFont.systemFont(ofSize: size)
     }
     
     override func viewDidLoad() {
@@ -103,16 +102,15 @@ class GameViewController: UIViewController {
         timeValueLabel.setTime(duration: level.baseLevelTime)
         timeValueLabel.delegate = self
         
-        shuffleLabel.font = customFont(ofSize: 18)
-        shuffleLabel.text = "SHUFFLE"
-        shuffleLabel.textAlignment = .center
-        shuffleLabel.textColor = .white
-        shuffleLabel.isUserInteractionEnabled = true
-        view.addSubview(shuffleLabel)
+        shuffleButton.setBackgroundImage(UIImage(named: "button-bg"), for: .normal)
+        shuffleButton.setTitle("SHUFFLE", for: .normal)
+        shuffleButton.setTitleColor(.black, for: .normal)
+        shuffleButton.titleLabel?.font = customFont(ofSize: 24)
+        shuffleButton.titleLabel?.textAlignment = .center
+        shuffleButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 6, right: 0)
+        shuffleButton.addTarget(self, action: #selector(handleShuffleButtonTapped), for: .touchUpInside)
+        view.addSubview(shuffleButton)
         
-        shuffleTapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(handleShuffleButtonTapped))
-        shuffleLabel.addGestureRecognizer(self.shuffleTapGestureRecognizer)
-
         skView.ignoresSiblingOrder = true
         skView.showsFPS = true
         skView.showsNodeCount = true
@@ -156,7 +154,7 @@ class GameViewController: UIViewController {
         
         let xMargins: CGFloat = 16
         let labelPadding: CGFloat = 2
-        let maxLabelWidth = view.frame.width * 0.3
+        let maxLabelWidth = ceil(view.frame.width * 0.3)
         
         let scoreSize = scoreLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
         scoreLabel.frame = CGRect(x: xMargins, y: view.safeAreaInsets.top + yMargins, width: maxLabelWidth, height: scoreSize.height)
@@ -173,8 +171,10 @@ class GameViewController: UIViewController {
         let unionRect = timeValueLabel.frame.union(timeLabel.frame)
         pinny.position = CGPoint(x: view.center.x, y: view.frame.height - unionRect.midY)
 
-        let shuffleLabelSize = shuffleLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        shuffleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth/2), y: unionRect.maxY + labelPadding, width:maxLabelWidth, height: shuffleLabelSize.height)
+        let shuffleLabelSize = shuffleButton.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+        let minHeight: CGFloat = shuffleButton.image(for: .normal)?.size.height ?? 0
+        let buttonHeight = max(minHeight, shuffleLabelSize.height)
+        shuffleButton.frame = CGRect(x: view.frame.midX - (maxLabelWidth/2), y: view.frame.height - buttonHeight - (scene.footerHeight - buttonHeight)/2.0 , width:maxLabelWidth, height: max(minHeight, buttonHeight))
     }
     
     @objc func handleShuffleButtonTapped() {

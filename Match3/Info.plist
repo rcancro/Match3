@@ -45,8 +45,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Kenney Bold.ttf</string>
-		<string>Kenney Future Square.ttf</string>
+		<string>Kenney Mini Square.ttf</string>
 	</array>
 </dict>
 </plist>

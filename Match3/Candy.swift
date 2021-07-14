@@ -7,6 +7,16 @@
 
 import SpriteKit
 
+extension UIColor {
+
+    static func color(fromHexValue hexValue: Int, alpha: CGFloat = 1.0 ) -> UIColor {
+        return UIColor(red: CGFloat(((hexValue & 0xFF0000) >> 16))/255.0,
+                       green: CGFloat(((hexValue & 0xFF00) >> 8))/255.0,
+                       blue: CGFloat((hexValue & 0xFF))/255.0, alpha: alpha)
+    }
+    
+}
+
 enum CandyType: Int, CaseIterable {
     case unknown = 0,
          smartie,
@@ -31,17 +41,17 @@ enum CandyType: Int, CaseIterable {
     var associatedColor: UIColor {
         switch self {
         case .smartie:
-            return .green
+            return UIColor.color(fromHexValue: 0x36B9F4)
         case .MAndM:
-            return .blue
+            return UIColor.color(fromHexValue: 0xFC2820)
         case .candyCorn:
-            return .red
+            return UIColor.color(fromHexValue: 0xD85A14)
         case .lollipop:
-            return .orange
+            return UIColor.color(fromHexValue: 0xFC9CF2)
         case .hardCandy:
-            return .systemPink
+            return UIColor.color(fromHexValue: 0xFCFDFF)
         case .tootsie:
-            return .brown
+            return UIColor.color(fromHexValue: 0xFF71F1)
         case .unknown:
             return .white
         }
