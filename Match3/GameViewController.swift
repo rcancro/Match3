@@ -278,8 +278,7 @@ class GameViewController: UIViewController {
         level.resetComboMultiplier()
         level.detectPossibleSwaps()
         if level.possibleSwaps.count == 0 {
-            // TODO notify user that there are no matches?
-            shuffle()
+            wiggleShuffle()
         }
         view.isUserInteractionEnabled = true
     }
@@ -301,9 +300,21 @@ class GameViewController: UIViewController {
             let swap = level.possibleSwaps.randomElement()
             swap?.candyA.wiggle()
             swap?.candyB.wiggle()
+        } else {
+            wiggleShuffle()
         }
     }
 
+    func wiggleShuffle() {
+        let wiggle = CABasicAnimation(keyPath: "transform.rotation")
+        wiggle.fromValue = NSNumber(floatLiteral: -Double(CGFloat.pi / 36)) // 5 degrees each way
+        wiggle.toValue = NSNumber(floatLiteral: Double(CGFloat.pi / 36))
+        wiggle.duration = 0.15
+        wiggle.autoreverses = true
+        wiggle.repeatCount = 4
+        wiggle.isRemovedOnCompletion = true
+        shuffleButton.layer.add(wiggle, forKey: "wiggle")
+    }
 }
 
 extension GameViewController : CountdownLabelDelegate {
