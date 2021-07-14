@@ -260,6 +260,10 @@ class GameViewController: UIViewController {
     func beginNextTurn() {
         level.resetComboMultiplier()
         level.detectPossibleSwaps()
+        if level.possibleSwaps.count == 0 {
+            // TODO notify user that there are no matches?
+            shuffle()
+        }
         view.isUserInteractionEnabled = true
     }
     
