@@ -9,7 +9,7 @@ import SpriteKit
 
 class GameBackgroundLayer : SKNode {
     
-    let backgroundSprite = SKSpriteNode(imageNamed: "background-2")
+    let backgroundSprite = SKSpriteNode(imageNamed: "game-background-2")
     let footerSprite = SKSpriteNode(imageNamed: "footer-2")
     
     var spriteCounter: Int = 0
@@ -62,10 +62,10 @@ class GameBackgroundLayer : SKNode {
     
     private func update() {
         if spriteCounter == 0 {
-            backgroundSprite.texture = SKTexture(imageNamed: "background-1")
+            backgroundSprite.texture = SKTexture(imageNamed: "game-background-1")
             footerSprite.texture = SKTexture(imageNamed: "footer-1")
         } else if spriteCounter == 1 {
-            backgroundSprite.texture = SKTexture(imageNamed: "background-2")
+            backgroundSprite.texture = SKTexture(imageNamed: "game-background-2")
             footerSprite.texture = SKTexture(imageNamed: "footer-2")
         }
         

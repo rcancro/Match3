@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4A47F1D7269D018D00EC070B /* CountdownLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D6269D018D00EC070B /* CountdownLabel.swift */; };
-		4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */; };
+		4AF44FE9269F6368009C096F /* GameOverBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF44FE8269F6368009C096F /* GameOverBackgroundLayer.swift */; };
+		4AF44FEB269F66E4009C096F /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF44FEA269F66E4009C096F /* GameOverScene.swift */; };
+		4AF44FED269F68A1009C096F /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF44FEC269F68A1009C096F /* GameOverViewController.swift */; };
 		9C09CBCB269EAC4E00F1299E /* Kenney Mini Square.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */; };
 		9C09CBCD269F233D00F1299E /* GameBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */; };
 		9C09CBCF269F2C5500F1299E /* UIColor+Halloween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBCE269F2C5500F1299E /* UIColor+Halloween.swift */; };
@@ -39,7 +41,9 @@
 
 /* Begin PBXFileReference section */
 		4A47F1D6269D018D00EC070B /* CountdownLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownLabel.swift; sourceTree = "<group>"; };
-		4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverOverlay.swift; sourceTree = "<group>"; };
+		4AF44FE8269F6368009C096F /* GameOverBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverBackgroundLayer.swift; sourceTree = "<group>"; };
+		4AF44FEA269F66E4009C096F /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+		4AF44FEC269F68A1009C096F /* GameOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
 		9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Mini Square.ttf"; sourceTree = "<group>"; };
 		9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBackgroundLayer.swift; sourceTree = "<group>"; };
 		9C09CBCE269F2C5500F1299E /* UIColor+Halloween.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Halloween.swift"; sourceTree = "<group>"; };
@@ -112,9 +116,10 @@
 				9C858A2D269E05CE0052689D /* Fonts */,
 				9CD41805269B8ABE00C3F7A0 /* AppDelegate.swift */,
 				9CD4180B269B8ABE00C3F7A0 /* GameScene.swift */,
+				4AF44FEA269F66E4009C096F /* GameOverScene.swift */,
 				4A47F1D6269D018D00EC070B /* CountdownLabel.swift */,
-				4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */,
 				9CD4180D269B8ABE00C3F7A0 /* GameViewController.swift */,
+				4AF44FEC269F68A1009C096F /* GameOverViewController.swift */,
 				9CD41812269B8AC100C3F7A0 /* Assets.xcassets */,
 				9CAED69A269E4A090020E9AA /* pinny.atlas */,
 				9CD41814269B8AC100C3F7A0 /* Info.plist */,
@@ -130,6 +135,7 @@
 				9C16939A269D4940007FA97A /* Chain.swift */,
 				9CAED69C269E4DF90020E9AA /* Pinny.swift */,
 				9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */,
+				4AF44FE8269F6368009C096F /* GameOverBackgroundLayer.swift */,
 				9C09CBCE269F2C5500F1299E /* UIColor+Halloween.swift */,
 				CDA4EF99269F516E000C347E /* HapticManager.swift */,
 			);
@@ -227,15 +233,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				9CD4180C269B8ABE00C3F7A0 /* GameScene.swift in Sources */,
+				4AF44FE9269F6368009C096F /* GameOverBackgroundLayer.swift in Sources */,
 				9C3C60E7269BC27400EB5B61 /* SKAction+Spring.swift in Sources */,
 				9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */,
 				9C16939B269D4940007FA97A /* Chain.swift in Sources */,
 				9CAED69D269E4DF90020E9AA /* Pinny.swift in Sources */,
 				9CD4181B269B8D7900C3F7A0 /* Candy.swift in Sources */,
-				4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */,
+				4AF44FEB269F66E4009C096F /* GameOverScene.swift in Sources */,
 				9C169399269D43A2007FA97A /* Swap.swift in Sources */,
 				4A47F1D7269D018D00EC070B /* CountdownLabel.swift in Sources */,
 				9CD4181D269B9D7200C3F7A0 /* Level.swift in Sources */,
+				4AF44FED269F68A1009C096F /* GameOverViewController.swift in Sources */,
 				CD1C5455269E324000617B21 /* SKAction+Sounds.swift in Sources */,
 				9C09CBCF269F2C5500F1299E /* UIColor+Halloween.swift in Sources */,
 				9C09CBCD269F233D00F1299E /* GameBackgroundLayer.swift in Sources */,

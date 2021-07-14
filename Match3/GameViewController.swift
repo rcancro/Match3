@@ -10,11 +10,15 @@ import SpriteKit
 import GameplayKit
 
 var testingCombos = false
+func customFont(ofSize size: CGFloat) -> UIFont {
+    return UIFont(name: "Kenney-Mini-Square", size: size) ?? UIFont.systemFont(ofSize: size)
+}
 
 class GameViewController: UIViewController {
 
     var level: Level!
     var scene: GameScene!
+    var gameOverVC: GameOverViewController!
     var skView: SKView!
     
     let scoreLabel = UILabel()
@@ -40,9 +44,6 @@ class GameViewController: UIViewController {
     }
     
     let numberFormatter = NumberFormatter()
-
-    var gameOverOverlay: GameOverOverlay!
-    var gameOverTapGestureRecognizer: UITapGestureRecognizer!
     
     func beginGame() {
         score = 0
@@ -60,10 +61,6 @@ class GameViewController: UIViewController {
                 self.restartHintTimer()
             }
         }
-    }
-    
-    private func customFont(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "Kenney-Mini-Square", size: size) ?? UIFont.systemFont(ofSize: size)
     }
     
     override func viewDidLoad() {
@@ -122,10 +119,6 @@ class GameViewController: UIViewController {
         skView.backgroundColor = .green
         
         skView.isMultipleTouchEnabled = false
-        
-        gameOverOverlay = GameOverOverlay(frame: skView.frame)
-        gameOverOverlay.isHidden = true
-        view.addSubview(gameOverOverlay)
 
         // Create and configure the scene.
         scene = GameScene(size: skView.bounds.size)
@@ -254,26 +247,15 @@ class GameViewController: UIViewController {
     }
     
     func showGameOver() {
-        // This can be called repeatedly, so we'll only do the work
-        // if it hasn't been done yet
-        if (gameOverOverlay.isHidden) {
-            wiggleTimer.invalidate()
-            gameOverOverlay.score = self.score
-            gameOverOverlay.isHidden = false
-            scene.isUserInteractionEnabled = false
-            self.gameOverTapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(hideGameOver))
-            self.view.addGestureRecognizer(self.gameOverTapGestureRecognizer)
+        gameOverVC = GameOverViewController()
+        gameOverVC.score = score
+        gameOverVC.onDismissCompletion = { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.beginGame()
         }
-    }
-    
-    @objc func hideGameOver() {
-        if (!gameOverOverlay.isHidden) {
-            view.removeGestureRecognizer(gameOverTapGestureRecognizer)
-            gameOverTapGestureRecognizer = nil
-            gameOverOverlay.isHidden = true
-            scene.isUserInteractionEnabled = true
-            beginGame()
-        }
+        gameOverVC.modalPresentationStyle = .overCurrentContext
+
+        self.present(gameOverVC, animated: true, completion: nil)
     }
     
     func wiggleHint() {
