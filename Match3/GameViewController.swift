@@ -126,7 +126,7 @@ class GameViewController: UIViewController {
         scene = GameScene(size: skView.bounds.size)
         level = Level()
         scene.level = level
-        scene.backgroundColor = .purple
+        scene.backgroundColor = UIColor.color(fromHexValue: 0x974D15)
         scene.swipeHandler = handleSwipe
         
         pinny.animate()
@@ -174,7 +174,7 @@ class GameViewController: UIViewController {
         let shuffleLabelSize = shuffleButton.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
         let minHeight: CGFloat = shuffleButton.image(for: .normal)?.size.height ?? 0
         let buttonHeight = max(minHeight, shuffleLabelSize.height)
-        shuffleButton.frame = CGRect(x: view.frame.midX - (maxLabelWidth/2), y: view.frame.height - buttonHeight - (scene.footerHeight - buttonHeight)/2.0 , width:maxLabelWidth, height: max(minHeight, buttonHeight))
+        shuffleButton.frame = CGRect(x: view.frame.midX - (maxLabelWidth/2), y: view.frame.height - (view.safeAreaInsets.bottom + buttonHeight + (scene.footerHeight - buttonHeight)/2.0) , width:maxLabelWidth, height: max(minHeight, buttonHeight))
     }
     
     @objc func handleShuffleButtonTapped() {

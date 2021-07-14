@@ -10,6 +10,7 @@
 		4A47F1D7269D018D00EC070B /* CountdownLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D6269D018D00EC070B /* CountdownLabel.swift */; };
 		4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */; };
 		9C09CBCB269EAC4E00F1299E /* Kenney Mini Square.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */; };
+		9C09CBCD269F233D00F1299E /* GameBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */; };
 		9C169399269D43A2007FA97A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C169398269D43A2007FA97A /* Swap.swift */; };
 		9C16939B269D4940007FA97A /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C16939A269D4940007FA97A /* Chain.swift */; };
 		9C1693A2269E86D0007FA97A /* combo2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C16939C269E86CF007FA97A /* combo2.wav */; };
@@ -38,6 +39,7 @@
 		4A47F1D6269D018D00EC070B /* CountdownLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownLabel.swift; sourceTree = "<group>"; };
 		4A47F1D8269E0EEA00EC070B /* GameOverOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverOverlay.swift; sourceTree = "<group>"; };
 		9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Mini Square.ttf"; sourceTree = "<group>"; };
+		9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBackgroundLayer.swift; sourceTree = "<group>"; };
 		9C169398269D43A2007FA97A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		9C16939A269D4940007FA97A /* Chain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 		9C16939C269E86CF007FA97A /* combo2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = combo2.wav; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				9C169398269D43A2007FA97A /* Swap.swift */,
 				9C16939A269D4940007FA97A /* Chain.swift */,
 				9CAED69C269E4DF90020E9AA /* Pinny.swift */,
+				9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */,
 			);
 			path = Match3;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 				4A47F1D7269D018D00EC070B /* CountdownLabel.swift in Sources */,
 				9CD4181D269B9D7200C3F7A0 /* Level.swift in Sources */,
 				CD1C5455269E324000617B21 /* SKAction+Sounds.swift in Sources */,
+				9C09CBCD269F233D00F1299E /* GameBackgroundLayer.swift in Sources */,
 				9C858A2A269CA81A0052689D /* Array+Candy.swift in Sources */,
 				9CD4180E269B8ABE00C3F7A0 /* GameViewController.swift in Sources */,
 				9C858A2C269CAACB0052689D /* Array2D+Candy.swift in Sources */,

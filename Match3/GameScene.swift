@@ -18,16 +18,17 @@ class GameScene: SKScene {
     
     let gameLayer = SKNode()
     let candiesLayer = SKNode()
+    var backgroundLayer: GameBackgroundLayer?
     var footerHeight: CGFloat {
-        return footerSprite.size.height
+        if let background = backgroundLayer {
+            return background.footerHeight
+        }
+        return 0
     }
     
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     var swipeHandler: ((Swap) -> Void)?
-    
-    let backgroundSprite = SKSpriteNode(imageNamed: "background")
-    let footerSprite = SKSpriteNode(imageNamed: "footer")
     
     override init(size: CGSize) {
         super.init(size: size)
@@ -36,33 +37,14 @@ class GameScene: SKScene {
 
     override func didMove(to view: SKView) {
         super.didMove(to: view)
-        backgroundSprite.anchorPoint = .zero
-        backgroundSprite.position = .zero
-        backgroundSprite.zPosition = -1
         
-        footerSprite.centerRect = CGRect(x: 0.3, y: 0, width: 0.1, height: 0)
-        footerSprite.anchorPoint = .zero
-        footerSprite.position = .zero
-        footerSprite.zPosition = 0
-        footerSprite.size = CGSize(width: view.frame.width, height: footerSprite.size.height)
+        // this is gross, but i don't want to have to lay everything out again when we get the safe area insets
+        let insets = UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
         
-        let backgroundWidth = floor(((view.frame.height - footerSprite.size.height) * backgroundSprite.size.width)/backgroundSprite.size.height)
-        let backgroundHeight = floor((backgroundSprite.size.height * view.frame.width)/backgroundSprite.size.width)
-        let desiredBackgroundHeight = view.frame.height - footerSprite.size.height
+        backgroundLayer = GameBackgroundLayer(size: view.frame.size, insets: insets)
+        backgroundLayer?.animate(true)
+        gameLayer.addChild(backgroundLayer!)
         
-        if backgroundWidth >= view.frame.width {
-            backgroundSprite.size = CGSize(width: backgroundWidth, height: desiredBackgroundHeight)
-            backgroundSprite.position = CGPoint(x: -(backgroundWidth - view.frame.width)/2.0, y: footerSprite.size.height)
-        } else if backgroundHeight >= desiredBackgroundHeight {
-            backgroundSprite.size = CGSize(width: view.frame.width, height: backgroundHeight)
-            backgroundSprite.position = CGPoint(x: 0, y: footerSprite.size.height - ((backgroundHeight - desiredBackgroundHeight)/2.0))
-        } else {
-            // i have no idea
-            assert(false, "oh no")
-        }
-        
-        gameLayer.addChild(backgroundSprite)
-        gameLayer.addChild(footerSprite)
         
         let allTilesWidth = tileWidth * CGFloat(numColumns)
         let allSpacingWidth = tileSpacing * CGFloat(numColumns-1)
@@ -75,15 +57,14 @@ class GameScene: SKScene {
         
         let layerPosition = CGPoint(
             x: (size.width - (allTilesWidth + allSpacingWidth))/2.0,
-            y: footerSprite.size.height + 45) // TODO: we need to be flexible here for different phone sizes
+            y: backgroundLayer!.footerMaxY + 45) // TODO: we need to be flexible here for different phone sizes
         
         candiesLayer.position = layerPosition
         underlayLayer.position = CGPoint(x: layerPosition.x - underLayExtraPadding/2.0, y: layerPosition.y - underLayExtraPadding/2.0)
         gameLayer.addChild(underlayLayer)
         gameLayer.addChild(candiesLayer)
-
-        
     }
+
     
     func clearSprites(animted: Bool = false, completion: (()->Void)?) {
         if animted {
