@@ -34,7 +34,7 @@ class Level {
         
         return set
     }
-        
+    
     private func hasChain(atColumn column: Int, row: Int) -> Bool {
         let candyType = candies[column, row]!.candyType
         
@@ -374,6 +374,40 @@ class Level {
                 set.insert(candy)
             }
         }
+        return set
+    }
+}
+
+extension Level {
+    static let manyCombos: [CandyType] = [
+        .MAndM, .MAndM, .candyCorn, .candyCorn, .hardCandy, .hardCandy,
+        .lollipop, .MAndM, .MAndM, .candyCorn, .candyCorn, .hardCandy,
+        .lollipop, .lollipop, .MAndM, .MAndM, .candyCorn, .candyCorn,
+        .smartie, .lollipop, .lollipop, .MAndM, .MAndM, .candyCorn,
+        .smartie, .smartie, .lollipop, .lollipop, .MAndM, .MAndM,
+        .tootsie, .smartie, .smartie, .lollipop, .lollipop, .MAndM,
+        .tootsie, .tootsie, .smartie, .smartie, .lollipop, .lollipop,
+        .MAndM, .tootsie, .tootsie, .smartie, .smartie, .lollipop,
+        .MAndM, .MAndM, .tootsie, .tootsie, .smartie, .smartie,
+        .candyCorn, .MAndM, .MAndM, .tootsie, .tootsie, .smartie
+    ]
+    func setupManyCombos() -> Set<Candy> {
+        return loadCandies(Self.manyCombos)
+    }
+    func loadCandies(_ candyTypes: [CandyType]) -> Set<Candy> {
+        var set: Set<Candy> = []
+        guard candyTypes.count == numRows * numColumns else {
+            fatalError("Can't load candies, incorrect count")
+        }
+        for candyIndex in 0..<candyTypes.count {
+            let candyType = candyTypes[candyIndex]
+            let column = candyIndex % numColumns
+            let row = candyIndex / numColumns
+            let candy = Candy(column: column, row: row, candyType: candyType)
+            candies[column, row] = candy
+            set.insert(candy)
+        }
+        detectPossibleSwaps()
         return set
     }
 }

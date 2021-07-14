@@ -9,6 +9,8 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
+var testingCombos = false
+
 class GameViewController: UIViewController {
 
     var level: Level!
@@ -53,7 +55,7 @@ class GameViewController: UIViewController {
 
     func shuffle() {
         scene.clearSprites(animted: true) {
-            let newCookies = self.level.shuffle()
+            let newCookies = testingCombos ? self.level.setupManyCombos() : self.level.shuffle()
             self.scene.addSprites(for: newCookies, animated: true) {
                 self.restartHintTimer()
             }
