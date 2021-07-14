@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 
 var testingCombos = false
-var skipInto = false
+var skipInto = true
 
 class GameViewController: UIViewController {
 
