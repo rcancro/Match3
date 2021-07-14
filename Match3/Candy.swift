@@ -18,12 +18,12 @@ enum CandyType: Int, CaseIterable {
     
     var spriteName: String {
         let spriteNames = [
-            "smarties",
-            "orange-pop",
-            "mm-red",
-            "candy-corn",
-            "tootsie-roll",
-            "pink-candy"]
+            "smarties-tile",
+            "orange-pop-tile",
+            "mm-red-tile",
+            "candy-corn-tile",
+            "tootsie-roll-tile",
+            "pink-candy-tile"]
         
         return spriteNames[rawValue - 1]
     }

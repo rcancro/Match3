@@ -12,6 +12,14 @@
 		9C09CBCB269EAC4E00F1299E /* Kenney Mini Square.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */; };
 		9C09CBCD269F233D00F1299E /* GameBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */; };
 		9C09CBCF269F2C5500F1299E /* UIColor+Halloween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBCE269F2C5500F1299E /* UIColor+Halloween.swift */; };
+		9C09CBD1269F471A00F1299E /* TitleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBD0269F471A00F1299E /* TitleScene.swift */; };
+		9C09CBD4269F546600F1299E /* CandyEmitter.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBD2269F546600F1299E /* CandyEmitter.sks */; };
+		9C09CBD5269F546600F1299E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBD3269F546600F1299E /* Assets.xcassets */; };
+		9C09CBD7269F5CAA00F1299E /* UIFont+Halloween.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBD6269F5CAA00F1299E /* UIFont+Halloween.swift */; };
+		9C09CBDC269F664000F1299E /* leaves3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBD8269F664000F1299E /* leaves3.wav */; };
+		9C09CBDD269F664000F1299E /* leaves2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBD9269F664000F1299E /* leaves2.wav */; };
+		9C09CBDE269F664000F1299E /* leaves4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBDA269F664000F1299E /* leaves4.wav */; };
+		9C09CBDF269F664000F1299E /* leaves1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBDB269F664000F1299E /* leaves1.wav */; };
 		9C169399269D43A2007FA97A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C169398269D43A2007FA97A /* Swap.swift */; };
 		9C16939B269D4940007FA97A /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C16939A269D4940007FA97A /* Chain.swift */; };
 		9C1693A2269E86D0007FA97A /* combo2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C16939C269E86CF007FA97A /* combo2.wav */; };
@@ -42,6 +50,14 @@
 		9C09CBCA269EAA8500F1299E /* Kenney Mini Square.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kenney Mini Square.ttf"; sourceTree = "<group>"; };
 		9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBackgroundLayer.swift; sourceTree = "<group>"; };
 		9C09CBCE269F2C5500F1299E /* UIColor+Halloween.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Halloween.swift"; sourceTree = "<group>"; };
+		9C09CBD0269F471A00F1299E /* TitleScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScene.swift; sourceTree = "<group>"; };
+		9C09CBD2269F546600F1299E /* CandyEmitter.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CandyEmitter.sks; sourceTree = "<group>"; };
+		9C09CBD3269F546600F1299E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9C09CBD6269F5CAA00F1299E /* UIFont+Halloween.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Halloween.swift"; sourceTree = "<group>"; };
+		9C09CBD8269F664000F1299E /* leaves3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = leaves3.wav; sourceTree = "<group>"; };
+		9C09CBD9269F664000F1299E /* leaves2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = leaves2.wav; sourceTree = "<group>"; };
+		9C09CBDA269F664000F1299E /* leaves4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = leaves4.wav; sourceTree = "<group>"; };
+		9C09CBDB269F664000F1299E /* leaves1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = leaves1.wav; sourceTree = "<group>"; };
 		9C169398269D43A2007FA97A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		9C16939A269D4940007FA97A /* Chain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 		9C16939C269E86CF007FA97A /* combo2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = combo2.wav; sourceTree = "<group>"; };
@@ -90,6 +106,9 @@
 		9CD417F9269B8ABE00C3F7A0 = {
 			isa = PBXGroup;
 			children = (
+				9C09CBD6269F5CAA00F1299E /* UIFont+Halloween.swift */,
+				9C09CBD2269F546600F1299E /* CandyEmitter.sks */,
+				9C09CBD3269F546600F1299E /* Assets.xcassets */,
 				9CD41804269B8ABE00C3F7A0 /* Match3 */,
 				9CD41803269B8ABE00C3F7A0 /* Products */,
 			);
@@ -129,6 +148,7 @@
 				9CAED69C269E4DF90020E9AA /* Pinny.swift */,
 				9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */,
 				9C09CBCE269F2C5500F1299E /* UIColor+Halloween.swift */,
+				9C09CBD0269F471A00F1299E /* TitleScene.swift */,
 			);
 			path = Match3;
 			sourceTree = "<group>";
@@ -136,6 +156,10 @@
 		CD1C544B269E321F00617B21 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				9C09CBDB269F664000F1299E /* leaves1.wav */,
+				9C09CBD9269F664000F1299E /* leaves2.wav */,
+				9C09CBD8269F664000F1299E /* leaves3.wav */,
+				9C09CBDA269F664000F1299E /* leaves4.wav */,
 				9C16939F269E86CF007FA97A /* combo1.wav */,
 				9C16939C269E86CF007FA97A /* combo2.wav */,
 				9C16939D269E86CF007FA97A /* combo3.wav */,
@@ -205,13 +229,19 @@
 			files = (
 				9CAED69B269E4A090020E9AA /* pinny.atlas in Resources */,
 				9C1693A5269E86D0007FA97A /* combo1.wav in Resources */,
+				9C09CBDE269F664000F1299E /* leaves4.wav in Resources */,
+				9C09CBD4269F546600F1299E /* CandyEmitter.sks in Resources */,
 				9C1693A7269E86D0007FA97A /* combo6.wav in Resources */,
 				9C1693A6269E86D0007FA97A /* combo5.wav in Resources */,
 				9C1693A2269E86D0007FA97A /* combo2.wav in Resources */,
 				9CD41813269B8AC100C3F7A0 /* Assets.xcassets in Resources */,
+				9C09CBDF269F664000F1299E /* leaves1.wav in Resources */,
 				9C1693A4269E86D0007FA97A /* combo4.wav in Resources */,
 				9C1693A3269E86D0007FA97A /* combo3.wav in Resources */,
 				9C09CBCB269EAC4E00F1299E /* Kenney Mini Square.ttf in Resources */,
+				9C09CBD5269F546600F1299E /* Assets.xcassets in Resources */,
+				9C09CBDD269F664000F1299E /* leaves2.wav in Resources */,
+				9C09CBDC269F664000F1299E /* leaves3.wav in Resources */,
 				9CD41821269BA75D00C3F7A0 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -228,6 +258,7 @@
 				9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */,
 				9C16939B269D4940007FA97A /* Chain.swift in Sources */,
 				9CAED69D269E4DF90020E9AA /* Pinny.swift in Sources */,
+				9C09CBD1269F471A00F1299E /* TitleScene.swift in Sources */,
 				9CD4181B269B8D7900C3F7A0 /* Candy.swift in Sources */,
 				4A47F1D9269E0EEA00EC070B /* GameOverOverlay.swift in Sources */,
 				9C169399269D43A2007FA97A /* Swap.swift in Sources */,
@@ -240,6 +271,7 @@
 				9CD4180E269B8ABE00C3F7A0 /* GameViewController.swift in Sources */,
 				9C858A2C269CAACB0052689D /* Array2D+Candy.swift in Sources */,
 				9CD41806269B8ABE00C3F7A0 /* AppDelegate.swift in Sources */,
+				9C09CBD7269F5CAA00F1299E /* UIFont+Halloween.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

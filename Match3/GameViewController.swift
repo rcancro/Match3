@@ -11,8 +11,8 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
-    var level: Level!
-    var scene: GameScene!
+    var level: Level = Level()
+    var scene: GameScene? = nil
     var skView: SKView!
     
     let scoreLabel = UILabel()
@@ -52,51 +52,54 @@ class GameViewController: UIViewController {
     }
 
     func shuffle() {
-        scene.clearSprites(animted: true) {
+        scene?.clearSprites(animted: true) {
             let newCookies = self.level.shuffle()
-            self.scene.addSprites(for: newCookies, animated: true) {
+            self.scene?.addSprites(for: newCookies, animated: true) {
                 self.restartHintTimer()
             }
         }
     }
     
-    private func customFont(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "Kenney-Mini-Square", size: size) ?? UIFont.systemFont(ofSize: size)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        numberFormatter.locale = NSLocale.current
-        numberFormatter.numberStyle = .decimal
-        
         skView = SKView(frame: view.bounds)
         view.addSubview(skView)
-        level = Level()
         
+        numberFormatter.locale = NSLocale.current
+        numberFormatter.numberStyle = .decimal
+
+        let titleScene = TitleScene(size: skView.bounds.size)
+        titleScene.sceneDelegate = self
+        skView.presentScene(titleScene)
+
+    }
+    
+    func setupGame() {
+
         // preload our sounds
         let _ = SKAction.burstSound(comboLevel: 0)
 
-        scoreLabel.font = customFont(ofSize: 18)
+        scoreLabel.font = UIFont.customFont(ofSize: 18)
         scoreLabel.text = "SCORE"
         scoreLabel.textAlignment = .left
         scoreLabel.textColor = .halloweenPurple
         view.addSubview(scoreLabel)
-        
-        scoreValueLabel.font = customFont(ofSize: 32)
+
+        scoreValueLabel.font = UIFont.customFont(ofSize: 32)
         view.addSubview(scoreValueLabel)
         scoreValueLabel.adjustsFontSizeToFitWidth = true
         scoreValueLabel.text = "0"
         scoreValueLabel.textAlignment = .left
         scoreValueLabel.textColor = .halloweenYellowGreen
-                
-        timeLabel.font = customFont(ofSize: 18)
+
+        timeLabel.font = UIFont.customFont(ofSize: 18)
         timeLabel.text = "TIME"
         timeLabel.textAlignment = .left
         timeLabel.textColor = .halloweenPurple
         view.addSubview(timeLabel)
-        
-        timeValueLabel.font = customFont(ofSize: 32)
+
+        timeValueLabel.font = UIFont.customFont(ofSize: 32)
         view.addSubview(timeValueLabel)
         timeValueLabel.adjustsFontSizeToFitWidth = true
         timeValueLabel.text = "0"
@@ -104,23 +107,23 @@ class GameViewController: UIViewController {
         timeValueLabel.textColor = .halloweenYellowGreen
         timeValueLabel.setTime(duration: level.baseLevelTime)
         timeValueLabel.delegate = self
-        
+
         shuffleButton.setBackgroundImage(UIImage(named: "button-bg"), for: .normal)
         shuffleButton.setTitle("SHUFFLE", for: .normal)
         shuffleButton.setTitleColor(.black, for: .normal)
-        shuffleButton.titleLabel?.font = customFont(ofSize: 24)
+        shuffleButton.titleLabel?.font = UIFont.customFont(ofSize: 24)
         shuffleButton.titleLabel?.textAlignment = .center
         shuffleButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 6, right: 0)
         shuffleButton.addTarget(self, action: #selector(handleShuffleButtonTapped), for: .touchUpInside)
         view.addSubview(shuffleButton)
-        
+
         skView.ignoresSiblingOrder = true
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.backgroundColor = .green
-        
+
         skView.isMultipleTouchEnabled = false
-        
+
         gameOverOverlay = GameOverOverlay(frame: skView.frame)
         gameOverOverlay.isHidden = true
         view.addSubview(gameOverOverlay)
@@ -128,15 +131,20 @@ class GameViewController: UIViewController {
         // Create and configure the scene.
         scene = GameScene(size: skView.bounds.size)
         level = Level()
-        scene.level = level
-        scene.backgroundColor = UIColor.color(fromHexValue: 0x974D15)
-        scene.swipeHandler = handleSwipe
-        
-        pinny.animate()
-        scene.addChild(pinny)
+        scene?.level = level
+        scene?.backgroundColor = UIColor.color(fromHexValue: 0x974D15)
+        scene?.swipeHandler = handleSwipe
 
-        // Present the scene.
-        skView.presentScene(scene)
+        pinny.animate()
+        scene?.addChild(pinny)
+    }
+    
+    func transition(to gameScene: GameScene, fromScene previousScene: SKScene?) {
+        if let _ = previousScene {
+            skView.presentScene(gameScene, transition: SKTransition.reveal(with: .down, duration: 0.4))
+        } else {
+            skView.presentScene(gameScene)
+        }
         beginGame()
     }
     
@@ -154,6 +162,8 @@ class GameViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        
+        guard let scene = scene else { return }
         
         let xMargins: CGFloat = 16
         let sameLabelSpacing: CGFloat = -8 // spacing between the label and the value label
@@ -206,9 +216,9 @@ class GameViewController: UIViewController {
             swap.candyB.removeWiggle()
             
             level.performSwap(swap)
-            scene.animate(swap, completion: handleMatches)
+            scene?.animate(swap, completion: handleMatches)
         } else {
-            scene.animateInvalidSwap(swap) {
+            scene?.animateInvalidSwap(swap) {
               self.view.isUserInteractionEnabled = true
             }
         }
@@ -227,7 +237,7 @@ class GameViewController: UIViewController {
         }
         
         restartHintTimer()
-        scene.animateMatchedCandies(for: chains, comboLevel: comboLevel) {
+        scene?.animateMatchedCandies(for: chains, comboLevel: comboLevel) {
             for chain in chains {
                 self.score += chain.score
                 self.timeValueLabel.addTime(duration: chain.bonusTime)
@@ -235,7 +245,7 @@ class GameViewController: UIViewController {
             
             let fallingColumns = self.level.fillHoles()
             let newColumns = self.level.topUpCookies()
-            self.scene.animate(fallingCandies: fallingColumns, newCandies: newColumns) {
+            self.scene?.animate(fallingCandies: fallingColumns, newCandies: newColumns) {
                 self.handleMatches(comboLevel: comboLevel + 1)
             }
         }
@@ -258,7 +268,7 @@ class GameViewController: UIViewController {
             wiggleTimer.invalidate()
             gameOverOverlay.score = self.score
             gameOverOverlay.isHidden = false
-            scene.isUserInteractionEnabled = false
+            scene?.isUserInteractionEnabled = false
             self.gameOverTapGestureRecognizer = UITapGestureRecognizer(target: self, action:#selector(hideGameOver))
             self.view.addGestureRecognizer(self.gameOverTapGestureRecognizer)
         }
@@ -269,7 +279,7 @@ class GameViewController: UIViewController {
             view.removeGestureRecognizer(gameOverTapGestureRecognizer)
             gameOverTapGestureRecognizer = nil
             gameOverOverlay.isHidden = true
-            scene.isUserInteractionEnabled = true
+            scene?.isUserInteractionEnabled = true
             beginGame()
         }
     }
@@ -289,6 +299,14 @@ extension GameViewController : CountdownLabelDelegate {
     func countdownLabelDidExpire(_ countdownLabel: CountdownLabel) {
         // game over
         showGameOver()
+    }
+}
+
+extension GameViewController : TitleSceneDelegate {
+    
+    func titleSceneShouldDismiss(_ titleScene: TitleScene) {
+        setupGame()
+        transition(to: scene!, fromScene: titleScene)
     }
     
 }

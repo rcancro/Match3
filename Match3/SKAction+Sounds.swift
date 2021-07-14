@@ -21,4 +21,17 @@ extension SKAction {
         let level = comboLevel >= burstAudioActions.count ? burstAudioActions.count - 1 : comboLevel
         return burstAudioActions[level]
     }
+
+    static let leavesAudioActions = [
+        SKAction.playSoundFileNamed("leaves1", waitForCompletion: false),
+        SKAction.playSoundFileNamed("leaves2", waitForCompletion: false),
+        SKAction.playSoundFileNamed("leaves3", waitForCompletion: false),
+        SKAction.playSoundFileNamed("leaves4", waitForCompletion: false),
+    ]
+
+    static func leavesSound() -> SKAction {
+        let level = Int(arc4random_uniform(4))
+        return leavesAudioActions[level]
+    }
+
 }

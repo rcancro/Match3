@@ -13,7 +13,10 @@ class Pinny : SKSpriteNode {
     let spriteSize = CGSize(width: 78, height: 127)
     let walkSpriteCount = 4
     
-    var spriteCount: Int = 1
+    var additionalAction: SKAction?
+    
+    private var spriteCount: Int = 1
+    private var currentSpriteName: String?
     
     private var sadFrames = 0
     
@@ -23,6 +26,13 @@ class Pinny : SKSpriteNode {
     
     func incrementSpriteCount() {
         self.spriteCount = (self.spriteCount + 1) % walkSpriteCount;
+    }
+    
+    func isBent() -> Bool {
+        if let spriteName = currentSpriteName {
+            return spriteName.prefix(1) != "1"
+        }
+        return false
     }
     
     func animate() {
@@ -61,11 +71,17 @@ class Pinny : SKSpriteNode {
                 strongSelf.sadFrames = strongSelf.sadFrames - 1
             }
             strongSelf.incrementSpriteCount()
+            strongSelf.currentSpriteName = spriteName
             strongSelf.texture = strongSelf.pinnyAnimatedAtlas.textureNamed(spriteName)
             
         }
         
-        run(SKAction.repeatForever(SKAction.sequence([wait, changeSprite])))
+        if let additionalAction = additionalAction {
+            let group = SKAction.group([changeSprite, additionalAction])
+            run(SKAction.repeatForever(SKAction.sequence([wait, group])))
+        } else {
+            run(SKAction.repeatForever(SKAction.sequence([wait, changeSprite])))
+        }
     }
     
     func makeSad() {
