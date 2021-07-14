@@ -34,6 +34,7 @@
 		9CD4181F269B9DE000C3F7A0 /* Array2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CD4181E269B9DE000C3F7A0 /* Array2D.swift */; };
 		9CD41821269BA75D00C3F7A0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9CD41820269BA75D00C3F7A0 /* LaunchScreen.storyboard */; };
 		CD1C5455269E324000617B21 /* SKAction+Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1C5454269E324000617B21 /* SKAction+Sounds.swift */; };
+		CDA4EF9A269F516E000C347E /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA4EF99269F516E000C347E /* HapticManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		9CD4181E269B9DE000C3F7A0 /* Array2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array2D.swift; sourceTree = "<group>"; };
 		9CD41820269BA75D00C3F7A0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD1C5454269E324000617B21 /* SKAction+Sounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKAction+Sounds.swift"; sourceTree = "<group>"; };
+		CDA4EF99269F516E000C347E /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 				9CAED69C269E4DF90020E9AA /* Pinny.swift */,
 				9C09CBCC269F233D00F1299E /* GameBackgroundLayer.swift */,
 				9C09CBCE269F2C5500F1299E /* UIColor+Halloween.swift */,
+				CDA4EF99269F516E000C347E /* HapticManager.swift */,
 			);
 			path = Match3;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				9C858A2A269CA81A0052689D /* Array+Candy.swift in Sources */,
 				9CD4180E269B8ABE00C3F7A0 /* GameViewController.swift in Sources */,
 				9C858A2C269CAACB0052689D /* Array2D+Candy.swift in Sources */,
+				CDA4EF9A269F516E000C347E /* HapticManager.swift in Sources */,
 				9CD41806269B8ABE00C3F7A0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

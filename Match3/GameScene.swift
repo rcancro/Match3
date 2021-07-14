@@ -26,6 +26,7 @@ class GameScene: SKScene {
         return 0
     }
     
+    private var hapticManager: HapticManager?
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     var swipeHandler: ((Swap) -> Void)?
@@ -38,6 +39,9 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
+        // Make sure the haptic manager is available when the scene appears.
+        hapticManager = HapticManager()
+
         // this is gross, but i don't want to have to lay everything out again when we get the safe area insets
         let insets = UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
         
@@ -316,6 +320,7 @@ class GameScene: SKScene {
     
     func animateMatchedCandies(for chains: Set<Chain>, comboLevel: Int, completion: @escaping () -> Void) {
         var burst = [SKAction.burstSound(comboLevel: comboLevel)]
+        hapticManager?.playCombo(comboLevel: comboLevel)
         for chain in chains {
             animateScore(for: chain)
             for candy in chain.candies {
