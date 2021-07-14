@@ -33,6 +33,7 @@ class GameScene: SKScene {
     let startLabel = SKLabelNode()
     let beepAction: SKAction
     let goAction: SKAction
+    var pinny: Pinny? = nil
 
 
     override init(size: CGSize) {
@@ -363,14 +364,26 @@ class GameScene: SKScene {
 
         spriteB.run(SKAction.sequence([groupB, groupA]))
         spriteB.run(SKAction.sequence([seqB, seqA]))
-//        spriteB.run(seqB)
-//
-//        spriteA.run(SKAction.sequence([moveA, moveB]), completion: completion)
-//        spriteB.run(SKAction.sequence([moveB, moveA]))
     }
     
     func animateMatchedCandies(for chains: Set<Chain>, comboLevel: Int, completion: @escaping () -> Void) {
-        var burst = [SKAction.burstSound(comboLevel: comboLevel)]
+        
+        // check to see if this chain is all candy corn
+        var allCandyCorn = true
+        for chain in chains {
+            for candy in chain.candies {
+                allCandyCorn = allCandyCorn && candy.candyType == .candyCorn
+                if !allCandyCorn {
+                    break
+                }
+            }
+        }
+        
+        if allCandyCorn {
+            pinny?.makeSad()
+        }
+        
+        var burst: [SKAction] = allCandyCorn ? [SKAction.badCandySound()] : [SKAction.burstSound(comboLevel: comboLevel)]
         hapticManager?.playCombo(comboLevel: comboLevel)
         for chain in chains {
             animateScore(for: chain)

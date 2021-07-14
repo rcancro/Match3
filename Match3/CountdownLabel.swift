@@ -9,6 +9,7 @@ import SpriteKit
 
 protocol CountdownLabelDelegate : AnyObject {
     func countdownLabelDidExpire(_ countdownLabel: CountdownLabel) -> Void
+    func countdownLabel(_ countdownLabel: CountdownLabel, didChangeTo time: TimeInterval) -> Void
 }
 
 class CountdownLabel: UILabel {
@@ -34,6 +35,7 @@ class CountdownLabel: UILabel {
                 guard let strongSelf = self else { return }
                 strongSelf.remainingTime = max(0, strongSelf.remainingTime - 1)
                 strongSelf.updateText()
+                strongSelf.delegate?.countdownLabel(strongSelf, didChangeTo: strongSelf.remainingTime)
                 
                 if strongSelf.remainingTime == 0 {
                     timer.invalidate()
@@ -45,11 +47,13 @@ class CountdownLabel: UILabel {
     
     func setTime(duration: TimeInterval){
         remainingTime = duration
+        delegate?.countdownLabel(self, didChangeTo: remainingTime)
         updateText()
     }
 
     func addTime(duration: TimeInterval){
         remainingTime = min(maxTime, remainingTime + duration)
+        delegate?.countdownLabel(self, didChangeTo: remainingTime)
         updateText()
     }
     
@@ -62,10 +66,6 @@ class CountdownLabel: UILabel {
         text = "\(Int(remainingTime))"
     }
 
-    
-    func startWithDuration(duration: TimeInterval){
-        remainingTime = duration
-    }
 
     func hasFinished() -> Bool{
         return remainingTime == 0

@@ -35,16 +35,19 @@ extension SKAction {
         return leavesAudioActions[level]
     }
     
-    static var badCandySound: SKAction {
-        return SKAction.playSoundFileNamed("bad-candy", waitForCompletion: false)
+    static let badSound = SKAction.playSoundFileNamed("bad-candy", waitForCompletion: false)
+    static func badCandySound() -> SKAction{
+        return badSound
     }
     
+    static let startBeep = SKAction.playSoundFileNamed("start_beep", waitForCompletion: false)
     static func startBeepSound() -> SKAction {
-        return SKAction.playSoundFileNamed("start_beep", waitForCompletion: false)
+        return startBeep
     }
     
+    static let goBeep = SKAction.playSoundFileNamed("go_beep", waitForCompletion: false)
     static func goBeepSound() -> SKAction {
-        return SKAction.playSoundFileNamed("go_beep", waitForCompletion: false)
+        return goBeep
     }
 
 }

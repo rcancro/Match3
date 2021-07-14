@@ -23,10 +23,10 @@
 		9C09CBE5269F7EE200F1299E /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBE1269F7EE200F1299E /* HapticManager.swift */; };
 		9C09CBE6269F7EE200F1299E /* GameOverBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBE2269F7EE200F1299E /* GameOverBackgroundLayer.swift */; };
 		9C09CBE7269F7EE200F1299E /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C09CBE3269F7EE200F1299E /* GameOverViewController.swift */; };
-		9C09CBEA269F820D00F1299E /* bad-candy.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBE8269F820D00F1299E /* bad-candy.aiff */; };
 		9C09CBEB269F820D00F1299E /* scary.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBE9269F820D00F1299E /* scary.mp3 */; };
-		9C09CBEF269F844900F1299E /* start_beep.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBED269F844900F1299E /* start_beep.aiff */; };
 		9C09CBF2269F8C6E00F1299E /* go_beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBF1269F8C6E00F1299E /* go_beep.wav */; };
+		9C09CBF4269F936100F1299E /* bad-candy.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBF3269F936100F1299E /* bad-candy.wav */; };
+		9C09CBF6269F955900F1299E /* start_beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C09CBF5269F955900F1299E /* start_beep.wav */; };
 		9C169399269D43A2007FA97A /* Swap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C169398269D43A2007FA97A /* Swap.swift */; };
 		9C16939B269D4940007FA97A /* Chain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C16939A269D4940007FA97A /* Chain.swift */; };
 		9C1693A2269E86D0007FA97A /* combo2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 9C16939C269E86CF007FA97A /* combo2.wav */; };
@@ -68,10 +68,10 @@
 		9C09CBE1269F7EE200F1299E /* HapticManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		9C09CBE2269F7EE200F1299E /* GameOverBackgroundLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverBackgroundLayer.swift; sourceTree = "<group>"; };
 		9C09CBE3269F7EE200F1299E /* GameOverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
-		9C09CBE8269F820D00F1299E /* bad-candy.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "bad-candy.aiff"; sourceTree = "<group>"; };
 		9C09CBE9269F820D00F1299E /* scary.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = scary.mp3; sourceTree = "<group>"; };
-		9C09CBED269F844900F1299E /* start_beep.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = start_beep.aiff; sourceTree = "<group>"; };
 		9C09CBF1269F8C6E00F1299E /* go_beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = go_beep.wav; sourceTree = "<group>"; };
+		9C09CBF3269F936100F1299E /* bad-candy.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "bad-candy.wav"; sourceTree = "<group>"; };
+		9C09CBF5269F955900F1299E /* start_beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = start_beep.wav; sourceTree = "<group>"; };
 		9C169398269D43A2007FA97A /* Swap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swap.swift; sourceTree = "<group>"; };
 		9C16939A269D4940007FA97A /* Chain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chain.swift; sourceTree = "<group>"; };
 		9C16939C269E86CF007FA97A /* combo2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = combo2.wav; sourceTree = "<group>"; };
@@ -173,9 +173,9 @@
 		CD1C544B269E321F00617B21 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				9C09CBF5269F955900F1299E /* start_beep.wav */,
+				9C09CBF3269F936100F1299E /* bad-candy.wav */,
 				9C09CBF1269F8C6E00F1299E /* go_beep.wav */,
-				9C09CBED269F844900F1299E /* start_beep.aiff */,
-				9C09CBE8269F820D00F1299E /* bad-candy.aiff */,
 				9C09CBE9269F820D00F1299E /* scary.mp3 */,
 				9C09CBDB269F664000F1299E /* leaves1.wav */,
 				9C09CBD9269F664000F1299E /* leaves2.wav */,
@@ -253,17 +253,17 @@
 				9C1693A5269E86D0007FA97A /* combo1.wav in Resources */,
 				9C09CBDE269F664000F1299E /* leaves4.wav in Resources */,
 				9C09CBD4269F546600F1299E /* CandyEmitter.sks in Resources */,
+				9C09CBF4269F936100F1299E /* bad-candy.wav in Resources */,
 				9C1693A7269E86D0007FA97A /* combo6.wav in Resources */,
-				9C09CBEA269F820D00F1299E /* bad-candy.aiff in Resources */,
 				9C1693A6269E86D0007FA97A /* combo5.wav in Resources */,
 				9C1693A2269E86D0007FA97A /* combo2.wav in Resources */,
 				9C09CBF2269F8C6E00F1299E /* go_beep.wav in Resources */,
 				9CD41813269B8AC100C3F7A0 /* Assets.xcassets in Resources */,
-				9C09CBEF269F844900F1299E /* start_beep.aiff in Resources */,
 				9C09CBDF269F664000F1299E /* leaves1.wav in Resources */,
 				9C1693A4269E86D0007FA97A /* combo4.wav in Resources */,
 				9C1693A3269E86D0007FA97A /* combo3.wav in Resources */,
 				9C09CBCB269EAC4E00F1299E /* Kenney Mini Square.ttf in Resources */,
+				9C09CBF6269F955900F1299E /* start_beep.wav in Resources */,
 				9C09CBD5269F546600F1299E /* Assets.xcassets in Resources */,
 				9C09CBDD269F664000F1299E /* leaves2.wav in Resources */,
 				9C09CBDC269F664000F1299E /* leaves3.wav in Resources */,

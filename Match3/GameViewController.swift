@@ -97,6 +97,7 @@ class GameViewController: UIViewController {
 
         // preload our sounds
         let _ = SKAction.burstSound(comboLevel: 0)
+        let _ = SKAction.badCandySound()
 
         scoreLabel.font = UIFont.customFont(ofSize: 18)
         scoreLabel.text = "SCORE"
@@ -144,6 +145,7 @@ class GameViewController: UIViewController {
 
         // Create and configure the scene.
         scene = GameScene(size: skView.bounds.size)
+        scene?.pinny = pinny // this is lazy. I'm sorry.
         level = Level()
         scene?.level = level
         scene?.backgroundColor = UIColor.color(fromHexValue: 0x974D15)
@@ -307,6 +309,10 @@ extension GameViewController : CountdownLabelDelegate {
     func countdownLabelDidExpire(_ countdownLabel: CountdownLabel) {
         // game over
         showGameOver()
+    }
+    
+    func countdownLabel(_ countdownLabel: CountdownLabel, didChangeTo time: TimeInterval) {
+        self.shuffleButton.isEnabled = time > abs(level.shufflePenalityTime)
     }
 }
 
