@@ -45,16 +45,28 @@ class GameViewController: UIViewController {
     let numberFormatter = NumberFormatter()
     
     func beginGame() {
+        
         score = 0
         level.resetComboMultiplier()
-        timeValueLabel.setTime(duration: level.baseLevelTime)
-        timeValueLabel.startCountdown()
-        restartHintTimer()
-        shuffle()
+        self.scene?.clearSprites(completion: {
+            self.scene?.isPaused = false
+            self.scene?.startCountDown {
+                
+                
+                self.timeValueLabel.setTime(duration: self.level.baseLevelTime)
+                self.timeValueLabel.startCountdown()
+                self.restartHintTimer()
+            } aboutToCompletion: {
+                let newCookies = testingCombos ? self.level.setupManyCombos() : self.level.shuffle()
+                self.scene?.addSprites(for: newCookies, animated: true) {
+                    self.restartHintTimer()
+                }
+            }
+        })
     }
 
     func shuffle() {
-        scene?.clearSprites(animted: true) {
+        scene?.clearSprites(animated: true) {
             let newCookies = testingCombos ? self.level.setupManyCombos() : self.level.shuffle()
             self.scene?.addSprites(for: newCookies, animated: true) {
                 self.restartHintTimer()
@@ -136,6 +148,7 @@ class GameViewController: UIViewController {
         scene?.level = level
         scene?.backgroundColor = UIColor.color(fromHexValue: 0x974D15)
         scene?.swipeHandler = handleSwipe
+        scene?.isPaused = true
 
         pinny.animate()
         scene?.addChild(pinny)

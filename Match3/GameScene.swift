@@ -30,8 +30,14 @@ class GameScene: SKScene {
     private var swipeFromColumn: Int?
     private var swipeFromRow: Int?
     var swipeHandler: ((Swap) -> Void)?
-    
+    let startLabel = SKLabelNode()
+    let beepAction: SKAction
+    let goAction: SKAction
+
+
     override init(size: CGSize) {
+        beepAction = SKAction.startBeepSound()
+        goAction = SKAction.goBeepSound()
         super.init(size: size)
         addChild(gameLayer)
     }
@@ -67,18 +73,63 @@ class GameScene: SKScene {
         underlayLayer.position = CGPoint(x: layerPosition.x - underLayExtraPadding/2.0, y: layerPosition.y - underLayExtraPadding/2.0)
         gameLayer.addChild(underlayLayer)
         gameLayer.addChild(candiesLayer)
+        startLabel.position = view.center
     }
 
     
-    func clearSprites(animted: Bool = false, completion: (()->Void)?) {
-        if animted {
+    func startCountDown(completion: @escaping ()->Void, aboutToCompletion: (()->Void)?) {
+        
+        let fadeOutAction = SKAction.fadeOut(withDuration: 1)
+        let fadeInAction = SKAction.fadeIn(withDuration: 0.1)
+        let readySeq = SKAction.sequence([beepAction, SKAction.wait(forDuration: 0.1), fadeInAction, fadeOutAction])
+        
+        let goGroup = SKAction.group([fadeOutAction, goAction])
+        
+        startLabel.zPosition = 1000
+        startLabel.fontName = UIFont.customFontName
+        startLabel.text = "3"
+        startLabel.fontColor = .halloweenYellowGreen
+        startLabel.alpha = 0.0
+        startLabel.fontSize = 100
+        addChild(self.startLabel)
+
+        // give the sound time to load the first time
+        run(.wait(forDuration: 0.1)) {
+        
+            self.startLabel.run(readySeq) {
+                self.startLabel.text = "2"
+                self.startLabel.run(readySeq) {
+                    self.startLabel.text = "1"
+                    self.startLabel.run(readySeq) {
+                        self.startLabel.text = "GO!"
+                        aboutToCompletion?()
+                        self.startLabel.run(goGroup) {
+                            self.startLabel.removeFromParent()
+                            completion()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    
+    func clearSprites(animated: Bool = false, completion: (()->Void)?) {
+        
+        if animated {
             let candies = level.allCandies()
-            animate(scaleIn: false, candies: candies) {
-                self.candiesLayer.removeAllChildren()
+            if candies.count > 0 {
+                animate(scaleIn: false, candies: candies) {
+                    self.candiesLayer.removeAllChildren()
+                    completion?()
+                }
+            } else {
+                //nothing to do
                 completion?()
             }
         } else {
             candiesLayer.removeAllChildren()
+            completion?()
         }
     }
 

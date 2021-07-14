@@ -8,7 +8,12 @@
 import UIKit
 
 extension UIFont {
+    
+    static var customFontName: String {
+        return "Kenney-Mini-Square"
+    }
+    
     static func customFont(ofSize size: CGFloat) -> UIFont {
-        return UIFont(name: "Kenney-Mini-Square", size: size) ?? UIFont.systemFont(ofSize: size)
+        return UIFont(name: self.customFontName, size: size) ?? UIFont.systemFont(ofSize: size)
     }
 }
