@@ -23,11 +23,6 @@ class GameScene: SKScene {
     private var swipeFromRow: Int?
     var swipeHandler: ((Swap) -> Void)?
     
-    var currentChain = [Candy]()
-    var lastElementInChain: Candy? {
-        return currentChain.last
-    }
-    
     override init(size: CGSize) {
         super.init(size: size)
         
@@ -43,13 +38,31 @@ class GameScene: SKScene {
         gameLayer.addChild(candiesLayer)
     }
     
-    func clearSprites() {
-        candiesLayer.removeAllChildren()
+    func clearSprites(animted: Bool = false, completion: (()->Void)?) {
+        if animted {
+            let candies = level.allCandies()
+            animate(scaleIn: false, candies: candies) {
+                self.candiesLayer.removeAllChildren()
+                completion?()
+            }
+        } else {
+            candiesLayer.removeAllChildren()
+        }
     }
 
-    func addSprites(for candies: Set<Candy>) {
+    func addSprites(for candies: Set<Candy>, animated: Bool = false, completion: (()->Void)? = nil) {
         for candy in candies {
             addSprite(for: candy)
+        }
+        
+        if animated {
+            for candy in candies {
+                candy.sprite?.xScale = 0.0
+                candy.sprite?.yScale = 0.0
+            }
+            animate(scaleIn: true, candies: Array(candies)) {
+                completion?()
+            }
         }
     }
     
@@ -170,6 +183,18 @@ class GameScene: SKScene {
     }
     
 // MARK: - Animations
+    
+    func animate(scaleIn: Bool, candies: [Candy?], completion: (() -> Void)?) {
+        let duration = 0.3
+        candies.forEach { candy in
+            let fade = SKAction.scale(to: scaleIn ? 1.0 : 0.0, duration: duration)
+            candy?.sprite?.run(fade)
+        }
+        
+        run(SKAction.wait(forDuration: duration)) {
+            completion?()
+        }
+    }
     
     func animate(_ swap: Swap, completion: @escaping () -> Void) {
         let spriteA = swap.candyA.sprite!

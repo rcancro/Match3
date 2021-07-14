@@ -34,7 +34,7 @@ class Level {
         
         return set
     }
-    
+        
     private func hasChain(atColumn column: Int, row: Int) -> Bool {
         let candyType = candies[column, row]!.candyType
         
@@ -194,6 +194,16 @@ class Level {
             }
         }
         return set
+    }
+    
+    func allCandies() -> [Candy?] {
+        var allCandy = [Candy?]()
+        for row in 0..<numRows {
+            for column in 0..<numColumns {
+                allCandy.append(candies[column, row])
+            }
+        }
+        return allCandy
     }
     
     func resetComboMultiplier() {

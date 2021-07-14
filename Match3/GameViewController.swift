@@ -53,9 +53,12 @@ class GameViewController: UIViewController {
     }
 
     func shuffle() {
-      let newCookies = level.shuffle()
-      scene.clearSprites()
-      scene.addSprites(for: newCookies)
+        scene.clearSprites(animted: true) {
+            let newCookies = self.level.shuffle()
+            self.scene.addSprites(for: newCookies, animated: true) {
+                self.restartHintTimer()
+            }
+        }
     }
     
     private func customFont(ofSize size: CGFloat) -> UIFont {
