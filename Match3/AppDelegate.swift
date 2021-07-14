@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let window = UIWindow(frame: UIScreen.main.bounds)
             window.rootViewController = GameViewController()
+//        window.rootViewController = GameOverViewController(score: 123456)
             window.makeKeyAndVisible()
             self.window = window
             return true
