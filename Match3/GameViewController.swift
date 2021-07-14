@@ -21,8 +21,6 @@ class GameViewController: UIViewController {
     let timeLabel = UILabel()
     let timeValueLabel = CountdownLabel()
     let pinny = Pinny()
-
-    let yMargins: CGFloat = 4
     
     let shuffleButton = UIButton(type: .custom)
     
@@ -35,9 +33,11 @@ class GameViewController: UIViewController {
         }
         set {
             self._score = newValue
-            updateLabels(animated: true)
+            updateLabels()
         }
     }
+    
+    let numberFormatter = NumberFormatter()
 
     var gameOverOverlay: GameOverOverlay!
     var gameOverTapGestureRecognizer: UITapGestureRecognizer!
@@ -67,6 +67,9 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        numberFormatter.locale = NSLocale.current
+        numberFormatter.numberStyle = .decimal
+        
         skView = SKView(frame: view.bounds)
         view.addSubview(skView)
         level = Level()
@@ -74,31 +77,31 @@ class GameViewController: UIViewController {
         // preload our sounds
         let _ = SKAction.burstSound(comboLevel: 0)
 
-        scoreLabel.font = customFont(ofSize: 16)
+        scoreLabel.font = customFont(ofSize: 18)
         scoreLabel.text = "SCORE"
-        scoreLabel.textAlignment = .center
-        scoreLabel.textColor = .white
+        scoreLabel.textAlignment = .left
+        scoreLabel.textColor = .halloweenPurple
         view.addSubview(scoreLabel)
         
-        scoreValueLabel.font = customFont(ofSize: 18)
+        scoreValueLabel.font = customFont(ofSize: 32)
         view.addSubview(scoreValueLabel)
         scoreValueLabel.adjustsFontSizeToFitWidth = true
         scoreValueLabel.text = "0"
-        scoreValueLabel.textAlignment = .center
-        scoreValueLabel.textColor = .white
+        scoreValueLabel.textAlignment = .left
+        scoreValueLabel.textColor = .halloweenYellowGreen
                 
-        timeLabel.font = customFont(ofSize: 16)
+        timeLabel.font = customFont(ofSize: 18)
         timeLabel.text = "TIME"
-        timeLabel.textAlignment = .center
-        timeLabel.textColor = .white
+        timeLabel.textAlignment = .left
+        timeLabel.textColor = .halloweenPurple
         view.addSubview(timeLabel)
         
-        timeValueLabel.font = customFont(ofSize: 18)
+        timeValueLabel.font = customFont(ofSize: 32)
         view.addSubview(timeValueLabel)
         timeValueLabel.adjustsFontSizeToFitWidth = true
         timeValueLabel.text = "0"
-        timeValueLabel.textAlignment = .center
-        timeValueLabel.textColor = .white
+        timeValueLabel.textAlignment = .left
+        timeValueLabel.textColor = .halloweenYellowGreen
         timeValueLabel.setTime(duration: level.baseLevelTime)
         timeValueLabel.delegate = self
         
@@ -153,23 +156,26 @@ class GameViewController: UIViewController {
         super.viewWillLayoutSubviews()
         
         let xMargins: CGFloat = 16
-        let labelPadding: CGFloat = 2
-        let maxLabelWidth = ceil(view.frame.width * 0.3)
+        let sameLabelSpacing: CGFloat = -8 // spacing between the label and the value label
+        let labelSpacing: CGFloat = 8
+        let maxLabelWidth = ceil(view.frame.width * 0.5) - xMargins
+        let labelXOffset = view.frame.width/2.0
+        let yOffset: CGFloat = 20
         
         let scoreSize = scoreLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        scoreLabel.frame = CGRect(x: xMargins, y: view.safeAreaInsets.top + yMargins, width: maxLabelWidth, height: scoreSize.height)
+        scoreLabel.frame = CGRect(x: labelXOffset, y: view.safeAreaInsets.top + yOffset, width: maxLabelWidth, height: scoreSize.height)
         
         let scoreValueSize = scoreValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        scoreValueLabel.frame = CGRect(x: xMargins, y: scoreLabel.frame.maxY + labelPadding, width: maxLabelWidth, height: scoreValueSize.height)
+        scoreValueLabel.frame = CGRect(x: labelXOffset, y: scoreLabel.frame.maxY + sameLabelSpacing, width: maxLabelWidth, height: scoreValueSize.height)
         
         let timeSize = timeLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        timeLabel.frame = CGRect(x: view.frame.width - (xMargins + maxLabelWidth), y: view.safeAreaInsets.top + yMargins, width: maxLabelWidth, height: timeSize.height)
+        timeLabel.frame = CGRect(x: labelXOffset, y: scoreValueLabel.frame.maxY + labelSpacing, width: maxLabelWidth, height: timeSize.height)
         
         let timeValueSize = timeValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        timeValueLabel.frame = CGRect(x: view.frame.width - (xMargins + maxLabelWidth), y: scoreLabel.frame.maxY + labelPadding, width: maxLabelWidth, height: timeValueSize.height)
+        timeValueLabel.frame = CGRect(x: labelXOffset, y: timeLabel.frame.maxY + sameLabelSpacing, width: maxLabelWidth, height: timeValueSize.height)
         
-        let unionRect = timeValueLabel.frame.union(timeLabel.frame)
-        pinny.position = CGPoint(x: view.center.x, y: view.frame.height - unionRect.midY)
+        let pinnyRect = CGRect(x: 0, y: scoreLabel.frame.origin.y, width: labelXOffset, height: timeValueLabel.frame.maxY - scoreLabel.frame.origin.y)
+        pinny.position = CGPoint(x: pinnyRect.midX, y: view.frame.height - pinnyRect.midY)
 
         let shuffleLabelSize = shuffleButton.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
         let minHeight: CGFloat = shuffleButton.image(for: .normal)?.size.height ?? 0
@@ -194,6 +200,11 @@ class GameViewController: UIViewController {
         view.isUserInteractionEnabled = false
         
         if level.isPossibleSwap(swap) {
+            
+            // remove the wiggle if it exists
+            swap.candyA.removeWiggle()
+            swap.candyB.removeWiggle()
+            
             level.performSwap(swap)
             scene.animate(swap, completion: handleMatches)
         } else {
@@ -230,12 +241,8 @@ class GameViewController: UIViewController {
         }
     }
 
-    private func updateLabels(animated: Bool) {
-        self.scoreValueLabel.text = "\(score)"
-        
-        if animated {
-            scoreValueLabel.bumpAnimation()
-        }
+    private func updateLabels() {
+        self.scoreValueLabel.text = numberFormatter.string(from: NSNumber(value: score))
     }
     
     func beginNextTurn() {

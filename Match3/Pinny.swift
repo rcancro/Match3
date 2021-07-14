@@ -10,7 +10,7 @@ import SpriteKit
 class Pinny : SKSpriteNode {
     
     let pinnyAnimatedAtlas = SKTextureAtlas(named: "pinny")
-    let spriteSize = CGSize(width: 20, height: 34)
+    let spriteSize = CGSize(width: 78, height: 127)
     let walkSpriteCount = 4
     
     var spriteCount: Int = 1
@@ -34,19 +34,19 @@ class Pinny : SKSpriteNode {
             let blink = arc4random_uniform(10) == 5
             
             switch(strongSelf.spriteCount) {
-            case 0:
+            case 0,2:
                 if strongSelf.sadFrames > 0 {
                     spriteName = "1-sad"
                 } else {
                     spriteName = blink ? "1-blink" : "1"
                 }
-            case 1, 3:
+            case 1:
                 if strongSelf.sadFrames > 0 {
                     spriteName = "2-sad"
                 } else {
                     spriteName = blink ? "2-blink" : "2"
                 }
-            case 2:
+            case 3:
                 if strongSelf.sadFrames > 0 {
                     spriteName = "3-sad"
                 } else {

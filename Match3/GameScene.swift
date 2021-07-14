@@ -234,12 +234,35 @@ class GameScene: SKScene {
         let duration: TimeInterval = 0.3
         
         let moveA = SKAction.move(to: spriteB.position, duration: duration)
-        moveA.timingMode = .easeOut
-        spriteA.run(moveA, completion: completion)
+        let scaleA1 = SKAction.scale(to: 1.3, duration: duration/2)
+        let groupA = SKAction.group([moveA, scaleA1])
         
+        let waitA = SKAction.wait(forDuration: duration/2)
+        let scaleA2 = SKAction.scale(to: 1, duration: duration/2)
+        let seqA = SKAction.sequence([waitA, scaleA2])
+            
+        moveA.timingMode = .easeOut
+        scaleA1.timingMode = .linear
+        scaleA2.timingMode = .linear
+        
+        spriteA.run(groupA, completion: completion)
+        spriteA.run(seqA)
+
         let moveB = SKAction.move(to: spriteA.position, duration: duration)
+        let scaleB1 = SKAction.scale(to: 0.7, duration: duration/2)
+        let groupB = SKAction.group([moveB, scaleB1])
+        
+        let waitB = SKAction.wait(forDuration: duration/2)
+        let scaleB2 = SKAction.scale(to: 1, duration: duration/2)
+        let seqB = SKAction.sequence([waitB, scaleB2])
+
+        
         moveB.timingMode = .easeOut
-        spriteB.run(moveB)
+        scaleB1.timingMode = .linear
+        scaleB2.timingMode = .linear
+        
+        spriteB.run(groupB)
+        spriteB.run(seqB)
     }
     
     func animateInvalidSwap(_ swap: Swap, completion: @escaping () -> Void) {
@@ -252,13 +275,43 @@ class GameScene: SKScene {
         let duration: TimeInterval = 0.2
         
         let moveA = SKAction.move(to: spriteB.position, duration: duration)
+        let scaleA1 = SKAction.scale(to: 1.3, duration: duration/2)
+        let groupA = SKAction.group([moveA, scaleA1])
+        
+        let waitA = SKAction.wait(forDuration: duration/2)
+        let scaleA2 = SKAction.scale(to: 1, duration: duration/2)
+        let zPos = SKAction.run {
+            spriteA.zPosition = 80
+        }
+        let seqA = SKAction.sequence([waitA, scaleA2, zPos])
+            
         moveA.timingMode = .easeOut
+        scaleA1.timingMode = .linear
+        scaleA2.timingMode = .linear
         
+
         let moveB = SKAction.move(to: spriteA.position, duration: duration)
-        moveB.timingMode = .easeOut
+        let scaleB1 = SKAction.scale(to: 0.7, duration: duration/2)
+        let groupB = SKAction.group([moveB, scaleB1])
         
-        spriteA.run(SKAction.sequence([moveA, moveB]), completion: completion)
-        spriteB.run(SKAction.sequence([moveB, moveA]))
+        let waitB = SKAction.wait(forDuration: duration/2)
+        let scaleB2 = SKAction.scale(to: 1, duration: duration/2)
+        let seqB = SKAction.sequence([waitB, scaleB2])
+
+        
+        moveB.timingMode = .easeOut
+        scaleB1.timingMode = .linear
+        scaleB2.timingMode = .linear
+        
+        spriteA.run(SKAction.sequence([groupA, groupB]), completion:completion)
+        spriteA.run(SKAction.sequence([seqA, seqB]))
+
+        spriteB.run(SKAction.sequence([groupB, groupA]))
+        spriteB.run(SKAction.sequence([seqB, seqA]))
+//        spriteB.run(seqB)
+//
+//        spriteA.run(SKAction.sequence([moveA, moveB]), completion: completion)
+//        spriteB.run(SKAction.sequence([moveB, moveA]))
     }
     
     func animateMatchedCandies(for chains: Set<Chain>, comboLevel: Int, completion: @escaping () -> Void) {

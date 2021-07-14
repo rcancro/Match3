@@ -7,16 +7,6 @@
 
 import SpriteKit
 
-extension UIColor {
-
-    static func color(fromHexValue hexValue: Int, alpha: CGFloat = 1.0 ) -> UIColor {
-        return UIColor(red: CGFloat(((hexValue & 0xFF0000) >> 16))/255.0,
-                       green: CGFloat(((hexValue & 0xFF00) >> 8))/255.0,
-                       blue: CGFloat((hexValue & 0xFF))/255.0, alpha: alpha)
-    }
-    
-}
-
 enum CandyType: Int, CaseIterable {
     case unknown = 0,
          smartie,
@@ -158,6 +148,7 @@ class Candy: CustomStringConvertible, Hashable {
         }
     }
     
+    private static let wiggleKey: String = "wiggle"
     func wiggle() {
         if let sprite = sprite {
             let shortDuration: TimeInterval = 0.1
@@ -166,8 +157,16 @@ class Candy: CustomStringConvertible, Hashable {
             let rotateForward20Action = SKAction.rotate(byAngle: 0.3, duration: longDuration)
             let rotateBackward10Action = SKAction.rotate(byAngle: -0.15, duration: shortDuration)
             let rotateBackward20Action = SKAction.rotate(byAngle: -0.3, duration: longDuration)
-            let actions = SKAction.sequence([rotateForward10Action, rotateBackward20Action, rotateForward20Action, rotateBackward10Action])
-            sprite.run(actions)
+            let actions = SKAction.sequence([rotateForward10Action, rotateBackward20Action, rotateForward20Action, rotateBackward10Action, SKAction.wait(forDuration: 0.75)])
+            let repeatAction = SKAction.repeat(actions, count: 3)
+            sprite.run(repeatAction, withKey: Candy.wiggleKey)
+        }
+    }
+    
+    func removeWiggle() {
+        if let sprite = sprite {
+            sprite.removeAction(forKey: Candy.wiggleKey)
+            sprite.run(SKAction.rotate(toAngle: 0, duration: 0))
         }
     }
 }
