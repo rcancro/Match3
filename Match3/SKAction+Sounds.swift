@@ -17,8 +17,9 @@ extension SKAction {
         SKAction.playSoundFileNamed("combo6", waitForCompletion: false),
     ]
 
+    static var maxComboLevel: Int { burstAudioActions.count }
     static func burstSound(comboLevel: Int) -> SKAction {
-        let level = comboLevel >= burstAudioActions.count ? burstAudioActions.count - 1 : comboLevel
+        let level = comboLevel >= maxComboLevel ? maxComboLevel - 1 : comboLevel
         return burstAudioActions[level]
     }
 

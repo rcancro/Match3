@@ -27,5 +27,7 @@ extension UIColor {
         return UIColor.color(fromHexValue: 0xFC2820)
     }
     
-    
+    static var halloweenPink: UIColor {
+        return UIColor.color(fromHexValue: 0xC62FAE)
+    }
 }
