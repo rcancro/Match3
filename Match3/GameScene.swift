@@ -34,7 +34,7 @@ class GameScene: SKScene {
     let beepAction: SKAction
     let goAction: SKAction
     var pinny: Pinny? = nil
-
+    let backgroundSound = SKAudioNode(fileNamed: "scary.mp3")
 
     override init(size: CGSize) {
         beepAction = SKAction.startBeepSound()
@@ -106,6 +106,7 @@ class GameScene: SKScene {
                         aboutToCompletion?()
                         self.startLabel.run(goGroup) {
                             self.startLabel.removeFromParent()
+                            self.addChild(self.backgroundSound)
                             completion()
                         }
                     }
@@ -114,6 +115,9 @@ class GameScene: SKScene {
         }
     }
 
+    func gameOver() {
+        backgroundSound.removeFromParent()
+    }
     
     func clearSprites(animated: Bool = false, completion: (()->Void)?) {
         

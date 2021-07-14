@@ -283,6 +283,7 @@ class GameViewController: UIViewController {
     }
     
     func showGameOver() {
+        scene?.gameOver()
         gameOverVC = GameOverViewController()
         gameOverVC.score = score
         gameOverVC.onDismissCompletion = { [weak self] in

@@ -27,6 +27,7 @@ class GameOverScene: SKScene {
         backgroundLayer = GameOverBackgroundLayer(size: view.frame.size, insets: insets)
         backgroundLayer?.animate(true)
         gameOverLayer.addChild(backgroundLayer!)
+        run(SKAction.playSoundFileNamed("death", waitForCompletion: false))
     }
     
     required init?(coder aDecoder: NSCoder) {
