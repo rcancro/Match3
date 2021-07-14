@@ -48,35 +48,35 @@ class GameOverViewController: UIViewController {
         skView.isMultipleTouchEnabled = false
         view.addSubview(skView)
         
-        gameOverTitleLabel.font = customFont(ofSize: 60)
+        gameOverTitleLabel.font = UIFont.customFont(ofSize: 60)
         view.addSubview(gameOverTitleLabel)
         gameOverTitleLabel.adjustsFontSizeToFitWidth = true
         gameOverTitleLabel.text = "GAME OVER"
         gameOverTitleLabel.textAlignment = .center
         gameOverTitleLabel.textColor = .halloweenYellowGreen
         
-        scoreTitleLabel.font = customFont(ofSize: 18)
+        scoreTitleLabel.font = UIFont.customFont(ofSize: 18)
         view.addSubview(scoreTitleLabel)
         scoreTitleLabel.adjustsFontSizeToFitWidth = true
         scoreTitleLabel.text = "SCORE"
         scoreTitleLabel.textAlignment = .center
         scoreTitleLabel.textColor = .halloweenPurple
         
-        scoreValueLabel.font = customFont(ofSize: 32)
+        scoreValueLabel.font = UIFont.customFont(ofSize: 32)
         view.addSubview(scoreValueLabel)
         scoreValueLabel.adjustsFontSizeToFitWidth = true
 //        scoreValueLabel.text = "0"
         scoreValueLabel.textAlignment = .center
         scoreValueLabel.textColor = .halloweenYellowGreen
         
-        highScoresTitleLabel.font = customFont(ofSize: 18)
+        highScoresTitleLabel.font = UIFont.customFont(ofSize: 18)
         view.addSubview(highScoresTitleLabel)
         highScoresTitleLabel.adjustsFontSizeToFitWidth = true
         highScoresTitleLabel.text = "HIGH SCORES"
         highScoresTitleLabel.textAlignment = .center
         highScoresTitleLabel.textColor = .halloweenPurple
         
-        tryAgainTitleLabel.font = customFont(ofSize: 36)
+        tryAgainTitleLabel.font = UIFont.customFont(ofSize: 36)
         view.addSubview(tryAgainTitleLabel)
         tryAgainTitleLabel.adjustsFontSizeToFitWidth = true
         tryAgainTitleLabel.text = "TRY AGAIN?"
@@ -86,7 +86,7 @@ class GameOverViewController: UIViewController {
         tryAgainYesButton = UIButton(type: .system)
         view.addSubview(tryAgainYesButton)
         tryAgainYesButton.setTitle("      YES      ", for: .normal)
-        tryAgainYesButton.titleLabel?.font = customFont(ofSize: 24)
+        tryAgainYesButton.titleLabel?.font = UIFont.customFont(ofSize: 24)
         tryAgainYesButton.setTitleColor(.white, for: .normal)
         tryAgainYesButton.backgroundColor = .halloweenPink
         tryAgainYesButton.addTarget(self, action: #selector(handleTryAgainYesButtonTapped), for: .touchUpInside)
@@ -94,7 +94,7 @@ class GameOverViewController: UIViewController {
         tryAgainNoButton = UIButton(type: .system)
         view.addSubview(tryAgainNoButton)
         tryAgainNoButton.setTitle("      NO      ", for: .normal)
-        tryAgainNoButton.titleLabel?.font = customFont(ofSize: 24)
+        tryAgainNoButton.titleLabel?.font = UIFont.customFont(ofSize: 24)
         tryAgainNoButton.setTitleColor(.white, for: .normal)
         tryAgainNoButton.backgroundColor = .halloweenPink
         tryAgainNoButton.addTarget(self, action: #selector(handleTryAgainNoButtonTapped), for: .touchUpInside)
@@ -102,7 +102,7 @@ class GameOverViewController: UIViewController {
         shareYourScoreButton = UIButton(type: .system)
         view.addSubview(shareYourScoreButton)
         shareYourScoreButton.setTitle("  SHARE YOUR SCORE  ", for: .normal)
-        shareYourScoreButton.titleLabel?.font = customFont(ofSize: 24)
+        shareYourScoreButton.titleLabel?.font = UIFont.customFont(ofSize: 24)
         shareYourScoreButton.setTitleColor(.white, for: .normal)
         shareYourScoreButton.backgroundColor = .halloweenPink
         shareYourScoreButton.addTarget(self, action: #selector(handleShareYourScorebuttonTapped), for: .touchUpInside)

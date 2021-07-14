@@ -10,9 +10,7 @@ import SpriteKit
 import GameplayKit
 
 var testingCombos = false
-func customFont(ofSize size: CGFloat) -> UIFont {
-    return UIFont(name: "Kenney-Mini-Square", size: size) ?? UIFont.systemFont(ofSize: size)
-}
+var skipInto = false
 
 class GameViewController: UIViewController {
 
@@ -73,10 +71,14 @@ class GameViewController: UIViewController {
         numberFormatter.locale = NSLocale.current
         numberFormatter.numberStyle = .decimal
 
-        let titleScene = TitleScene(size: skView.bounds.size)
-        titleScene.sceneDelegate = self
-        skView.presentScene(titleScene)
-
+        if skipInto {
+            setupGame()
+            transition(to: scene!, fromScene: nil)
+        } else {
+            let titleScene = TitleScene(size: skView.bounds.size)
+            titleScene.sceneDelegate = self
+            skView.presentScene(titleScene)
+        }
     }
     
     func setupGame() {
