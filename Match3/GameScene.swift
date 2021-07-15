@@ -35,6 +35,16 @@ class GameScene: SKScene {
     let goAction: SKAction
     var pinny: Pinny? = nil
     let backgroundSound = SKAudioNode(fileNamed: "scary.mp3")
+    var availableTopPadding: CGFloat = 0
+    var gameBoardSize: CGSize {
+        let allTilesWidth = tileWidth * CGFloat(numColumns)
+        let allSpacingWidth = tileSpacing * CGFloat(numColumns-1)
+        let allTilesHeight = tileHeight * CGFloat(numRows)
+        let allSpacingHeight = tileSpacing * CGFloat(numRows - 1)
+
+        let underLayExtraPadding: CGFloat = 12
+        return CGSize(width: allTilesWidth + underLayExtraPadding + allSpacingWidth, height: allTilesHeight + allSpacingHeight + underLayExtraPadding)
+    }
 
     override init(size: CGSize) {
         beepAction = SKAction.startBeepSound()
@@ -49,32 +59,45 @@ class GameScene: SKScene {
         // Make sure the haptic manager is available when the scene appears.
         hapticManager = HapticManager()
 
-        // this is gross, but i don't want to have to lay everything out again when we get the safe area insets
-        let insets = UIApplication.shared.windows.first?.safeAreaInsets ?? .zero
-        
-        backgroundLayer = GameBackgroundLayer(size: view.frame.size, insets: insets)
-        backgroundLayer?.animate(true)
-        gameLayer.addChild(backgroundLayer!)
-        
+        var insets = UIApplication.safeAreaInsetsAccordingToRicky
         
         let allTilesWidth = tileWidth * CGFloat(numColumns)
         let allSpacingWidth = tileSpacing * CGFloat(numColumns-1)
-        let allTilesHeight = tileHeight * CGFloat(numRows)
-        let allSpacingHeight = tileSpacing * CGFloat(numRows - 1)
 
+        backgroundLayer = GameBackgroundLayer(size: view.frame.size, insets: insets)
+        
         let underLayExtraPadding: CGFloat = 12
-        let underlayLayer = SKSpriteNode(color: .black.withAlphaComponent(0.4), size: CGSize(width: allTilesWidth + underLayExtraPadding + allSpacingWidth, height: allTilesHeight + allSpacingHeight + underLayExtraPadding))
+        let underlayLayer = SKSpriteNode(color: .black.withAlphaComponent(0.4), size: self.gameBoardSize)
         underlayLayer.anchorPoint = .zero
+        
+        
+        var footerBoardSpacing: CGFloat = 0
+        // figure out how much room we have
+        
+        let totalHeight = underlayLayer.size.height + backgroundLayer!.footerMaxY + insets.top + pinny!.size.height
+        let wiggleRoom = view.frame.height - totalHeight
+        if wiggleRoom < 0 {
+            insets.bottom += wiggleRoom/2.0
+            insets.top += wiggleRoom/2.0
+        } else {
+            footerBoardSpacing = ceil(wiggleRoom * 0.75)
+            availableTopPadding = wiggleRoom - footerBoardSpacing
+        }
+        
+        backgroundLayer?.update(with: view.frame.size, insets: insets)
+        backgroundLayer?.animate(true)
+        gameLayer.addChild(backgroundLayer!)
         
         let layerPosition = CGPoint(
             x: (size.width - (allTilesWidth + allSpacingWidth))/2.0,
-            y: backgroundLayer!.footerMaxY + 45) // TODO: we need to be flexible here for different phone sizes
+            y: backgroundLayer!.footerMaxY + footerBoardSpacing)
         
         candiesLayer.position = layerPosition
         underlayLayer.position = CGPoint(x: layerPosition.x - underLayExtraPadding/2.0, y: layerPosition.y - underLayExtraPadding/2.0)
         gameLayer.addChild(underlayLayer)
         gameLayer.addChild(candiesLayer)
         startLabel.position = view.center
+        
     }
 
     
@@ -106,7 +129,7 @@ class GameScene: SKScene {
                         aboutToCompletion?()
                         self.startLabel.run(goGroup) {
                             self.startLabel.removeFromParent()
-                            self.addChild(self.backgroundSound)
+                            //self.addChild(self.backgroundSound)
                             completion()
                         }
                     }
