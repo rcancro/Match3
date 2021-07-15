@@ -335,9 +335,11 @@ class GameViewController: UIViewController {
     func beginNextTurn() {
         level.resetComboMultiplier()
         level.detectPossibleSwaps()
-        if level.possibleSwaps.count == 0 {
+        while level.possibleSwaps.count == 0 {
+            shuffle()
             wiggleShuffle()
         }
+        restartHintTimer()
         view.isUserInteractionEnabled = true
     }
     
