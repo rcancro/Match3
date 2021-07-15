@@ -160,9 +160,10 @@ class GameOverViewController: UIViewController {
         
         // Try again?
         let tryAgainTitleSize = scoreValueLabel.sizeThatFits(maxSize)
-        tryAgainTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: 560, width: maxLabelWidth, height: tryAgainTitleSize.height)
+        let verticalButtonSpacing : CGFloat = 12.0
+        let bottomButtonStartingY: CGFloat = view.frame.maxY - (3 * tryAgainTitleSize.height) - (3 * verticalButtonSpacing)
+        tryAgainTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: bottomButtonStartingY, width: maxLabelWidth, height: tryAgainTitleSize.height)
         
-        let verticalButtonSpacing : CGFloat = 12.0;
         let buttonWidth : CGFloat = 60.0
         let buttonSpacing : CGFloat = 8.0
         
@@ -186,7 +187,9 @@ class GameOverViewController: UIViewController {
     }
     
     @objc func handleShareYourScorebuttonTapped() {
-        // TODO: Share your score
+        let shareText = "I scored \(score) in the Pinterest candy match game!"
+        let vc = UIActivityViewController(activityItems: [shareText], applicationActivities: [])
+        present(vc, animated: true, completion: nil)
     }
     
     required init?(coder: NSCoder) {
