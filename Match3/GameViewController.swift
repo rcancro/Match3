@@ -21,6 +21,8 @@ extension UIApplication {
     }
 }
 
+let numberFormatter = NumberFormatter()
+
 class GameViewController: UIViewController {
 
     var level: Level = Level()
@@ -342,8 +344,7 @@ class GameViewController: UIViewController {
     
     func showGameOver() {
         scene?.gameOver()
-        gameOverVC = GameOverViewController()
-        gameOverVC.score = score
+        gameOverVC = GameOverViewController(score: score)
         gameOverVC.onDismissCompletion = { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.beginGame()

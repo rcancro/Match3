@@ -13,16 +13,7 @@ class GameOverViewController: UIViewController {
 
     var gameOverScene: GameOverScene!
     
-    var _score: Int = 0
-    var score: Int {
-        get {
-            return self._score
-        }
-        set {
-            self._score = newValue
-            scoreValueLabel.text = String(newValue)
-        }
-    }
+    var score : Int
     
     var onDismissCompletion: ()->Void = {}
     
@@ -30,13 +21,22 @@ class GameOverViewController: UIViewController {
     var scoreTitleLabel = UILabel()
     var scoreValueLabel = UILabel()
     var highScoresTitleLabel = UILabel()
+    var highScoresTable : HighScoresView
     var tryAgainTitleLabel = UILabel()
     var tryAgainYesButton = UIButton()
     var tryAgainNoButton = UIButton()
     var shareYourScoreButton = UIButton()
     
+    var dummyHighScoresData = [(7001234, "EMMA HEROLD", false), (500, "RICKYCANCRO", false), (500, "DOUG PEDLEY", false)]
+    
     var skView: SKView!
     
+    init(score: Int) {
+        self.score = score
+        self.highScoresTable = HighScoresView(currentUserScore: score, highScoresArray: dummyHighScoresData)
+        super.init(nibName: nil, bundle: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -65,7 +65,7 @@ class GameOverViewController: UIViewController {
         scoreValueLabel.font = UIFont.customFont(ofSize: 32)
         view.addSubview(scoreValueLabel)
         scoreValueLabel.adjustsFontSizeToFitWidth = true
-//        scoreValueLabel.text = "0"
+        scoreValueLabel.text = numberFormatter.string(from: NSNumber(value: score))
         scoreValueLabel.textAlignment = .center
         scoreValueLabel.textColor = .halloweenYellowGreen
         
@@ -75,6 +75,8 @@ class GameOverViewController: UIViewController {
         highScoresTitleLabel.text = "HIGH SCORES"
         highScoresTitleLabel.textAlignment = .center
         highScoresTitleLabel.textColor = .halloweenPurple
+        
+        view.addSubview(highScoresTable)
         
         tryAgainTitleLabel.font = UIFont.customFont(ofSize: 36)
         view.addSubview(tryAgainTitleLabel)
@@ -129,7 +131,7 @@ class GameOverViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        let xMargins: CGFloat = 16
+        let xMargins: CGFloat = 22
         let maxLabelWidth = ceil(view.frame.width * 0.5) - xMargins
         let maxSize = CGSize(width: view.frame.width, height: 80000)
         
@@ -142,13 +144,19 @@ class GameOverViewController: UIViewController {
         let scoreTitleSize = scoreTitleLabel.sizeThatFits(maxSize)
         scoreTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: gameOverTitleLabel.frame.maxY + paddingBeforeScore, width: maxLabelWidth, height: scoreTitleSize.height)
         
-        let scoreValueNegativePadding : CGFloat = -10.0
+        let scoreValueNegativePadding : CGFloat = -8.0
         let scoreValueSize = scoreValueLabel.sizeThatFits(maxSize)
         scoreValueLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: scoreTitleLabel.frame.maxY + scoreValueNegativePadding, width: maxLabelWidth, height: scoreValueSize.height)
         
         // High scores
-        let highScoresTitleSize = scoreValueLabel.sizeThatFits(maxSize)
-        highScoresTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: 260, width: maxLabelWidth, height: highScoresTitleSize.height)
+        let highScoresTitleSize = highScoresTitleLabel.sizeThatFits(maxSize)
+        highScoresTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: 280, width: maxLabelWidth, height: highScoresTitleSize.height)
+        
+        let tableTopPadding : CGFloat = 8.0
+        let tableSidePadding : CGFloat = 60.0
+        let tableHeight : CGFloat = 100
+        let tableWidth : CGFloat = maxSize.width - (tableSidePadding * 2)
+        highScoresTable.frame = CGRect(x: view.frame.midX - (tableWidth / 2), y: highScoresTitleLabel.frame.maxY + tableTopPadding, width: tableWidth, height: tableHeight)
         
         // Try again?
         let tryAgainTitleSize = scoreValueLabel.sizeThatFits(maxSize)
@@ -180,4 +188,9 @@ class GameOverViewController: UIViewController {
     @objc func handleShareYourScorebuttonTapped() {
         // TODO: Share your score
     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 }

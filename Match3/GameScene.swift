@@ -129,7 +129,8 @@ class GameScene: SKScene {
                         aboutToCompletion?()
                         self.startLabel.run(goGroup) {
                             self.startLabel.removeFromParent()
-                            //self.addChild(self.backgroundSound)
+                            self.backgroundSound.run(SKAction.changeVolume(to: 0.4, duration: 0))
+                            self.addChild(self.backgroundSound)
                             completion()
                         }
                     }
