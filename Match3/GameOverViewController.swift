@@ -26,12 +26,14 @@ class GameOverViewController: UIViewController {
     var tryAgainYesButton = UIButton()
     var tryAgainNoButton = UIButton()
     var shareYourScoreButton = UIButton()
+    let musicPaused: Bool
     
     var dummyHighScoresData = [(7001234, "EMMA HEROLD", false), (500, "RICKYCANCRO", false), (500, "DOUG PEDLEY", false)]
     
     var skView: SKView!
     
-    init(score: Int) {
+    init(score: Int, musicPaused: Bool) {
+        self.musicPaused = musicPaused
         self.score = score
         self.highScoresTable = HighScoresView(currentUserScore: score, highScoresArray: dummyHighScoresData)
         super.init(nibName: nil, bundle: nil)
@@ -110,12 +112,13 @@ class GameOverViewController: UIViewController {
         shareYourScoreButton.addTarget(self, action: #selector(handleShareYourScorebuttonTapped), for: .touchUpInside)
         
         // Prep the game over page
-        gameOverScene = GameOverScene(size: skView.bounds.size)
+        gameOverScene = GameOverScene(size: skView.bounds.size, musicPaused: musicPaused)
         gameOverScene.backgroundColor = UIColor.purple
 
         // Present the scene.
         skView.presentScene(gameOverScene)
     }
+
     
     override var shouldAutorotate: Bool {
         return false

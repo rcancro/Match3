@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 
 var testingCombos = false
-var skipInto = true
+var skipInto = false
 
 extension UIApplication {
     static var safeAreaInsetsAccordingToRicky: UIEdgeInsets {
@@ -25,8 +25,10 @@ let numberFormatter = NumberFormatter()
 
 class GameViewController: UIViewController {
 
+    static let musicPausedKey: String = "musicPaused"
     var level: Level = Level()
     var scene: GameScene? = nil
+    var musicPaused = false
 
     var gameOverVC: GameOverViewController!
     var skView: SKView!
@@ -117,6 +119,7 @@ class GameViewController: UIViewController {
         let _ = SKAction.burstSound(comboLevel: 0)
         let _ = SKAction.badCandySound()
 
+        musicPaused = UserDefaults.standard.bool(forKey: GameViewController.musicPausedKey)
         let compact = isCompact()
         let labelPointSizes: CGFloat = compact ? 16 : 18
         let valueLabelPointSizes: CGFloat = compact ? 30 : 32
@@ -167,6 +170,7 @@ class GameViewController: UIViewController {
 
         // Create and configure the scene.
         scene = GameScene(size: skView.bounds.size)
+        scene?.pauseMusic(doPause: musicPaused)
         scene?.pinny = pinny // this is lazy. I'm sorry.
         if (compact) {
             pinny.makeCompact()
@@ -178,8 +182,23 @@ class GameViewController: UIViewController {
         scene?.swipeHandler = handleSwipe
         scene?.isPaused = true
 
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap(_ :)))
+        view.addGestureRecognizer(tapRecognizer)
+        
         pinny.animate()
         scene?.addChild(pinny)
+    }
+    
+    
+    @objc func didTap(_ recognizer: UITapGestureRecognizer) {
+        let skullRect = CGRect(x: 35, y: view.frame.height - scene!.footerHeight, width: 50, height: scene!.footerHeight)
+        
+        let pt = recognizer.location(in: self.view)
+        if skullRect.contains(pt) {
+            musicPaused = !musicPaused
+            scene?.pauseMusic(doPause: musicPaused)
+            UserDefaults.standard.set(musicPaused, forKey: GameViewController.musicPausedKey)
+        }
     }
     
     func transition(to gameScene: GameScene, fromScene previousScene: SKScene?) {
@@ -345,7 +364,7 @@ class GameViewController: UIViewController {
     
     func showGameOver() {
         scene?.gameOver()
-        gameOverVC = GameOverViewController(score: score)
+        gameOverVC = GameOverViewController(score: score, musicPaused: musicPaused)
         gameOverVC.onDismissCompletion = { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.beginGame()

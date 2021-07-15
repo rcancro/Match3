@@ -99,6 +99,14 @@ class GameScene: SKScene {
         startLabel.position = view.center
         
     }
+    
+    func pauseMusic(doPause: Bool) {
+        if doPause {
+            backgroundSound.run(.pause())
+        } else {
+            backgroundSound.run(.play())
+        }
+    }
 
     
     func startCountDown(completion: @escaping ()->Void, aboutToCompletion: (()->Void)?) {
