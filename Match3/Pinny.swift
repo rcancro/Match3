@@ -10,7 +10,6 @@ import SpriteKit
 class Pinny : SKSpriteNode {
     
     let pinnyAnimatedAtlas = SKTextureAtlas(named: "pinny")
-    let spriteSize = CGSize(width: 78, height: 127)
     let walkSpriteCount = 4
     
     var additionalAction: SKAction?
@@ -21,11 +20,16 @@ class Pinny : SKSpriteNode {
     private var sadFrames = 0
     
     init() {
+        let spriteSize = CGSize(width: 78, height: 127)
         super.init(texture: pinnyAnimatedAtlas.textureNamed("1"), color: UIColor.clear, size: spriteSize)
     }
     
     func incrementSpriteCount() {
         self.spriteCount = (self.spriteCount + 1) % walkSpriteCount;
+    }
+    
+    func makeCompact() {
+        self.size = CGSize(width: 39, height: 63)
     }
     
     func isBent() -> Bool {

@@ -12,6 +12,15 @@ import GameplayKit
 var testingCombos = false
 var skipInto = true
 
+extension UIApplication {
+    static var safeAreaInsetsAccordingToRicky: UIEdgeInsets {
+        if let insets = UIApplication.shared.windows.first?.safeAreaInsets {
+            return UIEdgeInsets(top: min(insets.top, 44), left: 0, bottom: min(insets.bottom, 16), right: 0)
+        }
+        return UIEdgeInsets(top: 44, left: 0, bottom: 16, right: 0)
+    }
+}
+
 let numberFormatter = NumberFormatter()
 
 class GameViewController: UIViewController {
@@ -86,6 +95,9 @@ class GameViewController: UIViewController {
         numberFormatter.numberStyle = .decimal
 
         if skipInto {
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+            
             setupGame()
             transition(to: scene!, fromScene: nil)
         } else {
@@ -95,32 +107,40 @@ class GameViewController: UIViewController {
         }
     }
     
+    func isCompact() -> Bool {
+        return self.view.frame.height < 800
+    }
+    
     func setupGame() {
 
         // preload our sounds
         let _ = SKAction.burstSound(comboLevel: 0)
         let _ = SKAction.badCandySound()
 
-        scoreLabel.font = UIFont.customFont(ofSize: 18)
+        let compact = isCompact()
+        let labelPointSizes: CGFloat = compact ? 16 : 18
+        let valueLabelPointSizes: CGFloat = compact ? 30 : 32
+
+        scoreLabel.font = UIFont.customFont(ofSize: labelPointSizes)
         scoreLabel.text = "SCORE"
         scoreLabel.textAlignment = .left
         scoreLabel.textColor = .halloweenPurple
         view.addSubview(scoreLabel)
 
-        scoreValueLabel.font = UIFont.customFont(ofSize: 32)
+        scoreValueLabel.font = UIFont.customFont(ofSize: valueLabelPointSizes)
         view.addSubview(scoreValueLabel)
         scoreValueLabel.adjustsFontSizeToFitWidth = true
         scoreValueLabel.text = "0"
         scoreValueLabel.textAlignment = .left
         scoreValueLabel.textColor = .halloweenYellowGreen
 
-        timeLabel.font = UIFont.customFont(ofSize: 18)
+        timeLabel.font = UIFont.customFont(ofSize: labelPointSizes)
         timeLabel.text = "TIME"
         timeLabel.textAlignment = .left
         timeLabel.textColor = .halloweenPurple
         view.addSubview(timeLabel)
 
-        timeValueLabel.font = UIFont.customFont(ofSize: 32)
+        timeValueLabel.font = UIFont.customFont(ofSize: valueLabelPointSizes)
         view.addSubview(timeValueLabel)
         timeValueLabel.adjustsFontSizeToFitWidth = true
         timeValueLabel.text = "0"
@@ -148,6 +168,10 @@ class GameViewController: UIViewController {
         // Create and configure the scene.
         scene = GameScene(size: skView.bounds.size)
         scene?.pinny = pinny // this is lazy. I'm sorry.
+        if (compact) {
+            pinny.makeCompact()
+        }
+        
         level = Level()
         scene?.level = level
         scene?.backgroundColor = UIColor.color(fromHexValue: 0x974D15)
@@ -183,33 +207,67 @@ class GameViewController: UIViewController {
         super.viewWillLayoutSubviews()
         
         guard let scene = scene else { return }
-        
+    
         let xMargins: CGFloat = 16
         let sameLabelSpacing: CGFloat = -8 // spacing between the label and the value label
         let labelSpacing: CGFloat = 8
+        let yOffset: CGFloat = scene.availableTopPadding
+        let safeAreaInsets = UIApplication.safeAreaInsetsAccordingToRicky
         let maxLabelWidth = ceil(view.frame.width * 0.5) - xMargins
-        let labelXOffset = view.frame.width/2.0
-        let yOffset: CGFloat = 20
-        
-        let scoreSize = scoreLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        scoreLabel.frame = CGRect(x: labelXOffset, y: view.safeAreaInsets.top + yOffset, width: maxLabelWidth, height: scoreSize.height)
-        
-        let scoreValueSize = scoreValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        scoreValueLabel.frame = CGRect(x: labelXOffset, y: scoreLabel.frame.maxY + sameLabelSpacing, width: maxLabelWidth, height: scoreValueSize.height)
-        
-        let timeSize = timeLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        timeLabel.frame = CGRect(x: labelXOffset, y: scoreValueLabel.frame.maxY + labelSpacing, width: maxLabelWidth, height: timeSize.height)
-        
-        let timeValueSize = timeValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
-        timeValueLabel.frame = CGRect(x: labelXOffset, y: timeLabel.frame.maxY + sameLabelSpacing, width: maxLabelWidth, height: timeValueSize.height)
-        
-        let pinnyRect = CGRect(x: 0, y: scoreLabel.frame.origin.y, width: labelXOffset, height: timeValueLabel.frame.maxY - scoreLabel.frame.origin.y)
-        pinny.position = CGPoint(x: pinnyRect.midX, y: view.frame.height - pinnyRect.midY)
 
+        if isCompact() {
+
+            let gameboardXOffset = (view.frame.width - scene.gameBoardSize.width)/2.0
+            let pinnyRect = CGRect(x: gameboardXOffset - pinny.size.width/2.0, y: yOffset, width: pinny.size.width, height: pinny.size.height)
+            pinny.position = CGPoint(x: pinnyRect.maxX, y: view.frame.height - pinnyRect.midY)
+            let labelXOffset = gameboardXOffset + pinny.size.width + xMargins
+            
+            
+            let timeSize = timeLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+            var timeValueSize = timeValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+            // we support 3 digits, but probably only have 2 in there right now
+            timeValueSize.width *= 1.5
+
+
+            let scoreMaxLabelWidth: CGFloat = view.frame.width - timeSize.width - gameboardXOffset - labelXOffset - xMargins
+            
+            let scoreSize = scoreLabel.sizeThatFits(CGSize(width: scoreMaxLabelWidth, height: 80000))
+            let scoreValueSize = scoreValueLabel.sizeThatFits(CGSize(width: scoreMaxLabelWidth, height: 80000))
+            let labelHeight = scoreSize.height + scoreValueSize.height + sameLabelSpacing
+            
+            scoreLabel.frame = CGRect(x: labelXOffset, y: (pinnyRect.height - labelHeight) , width: scoreMaxLabelWidth, height: scoreSize.height)
+            scoreLabel.textAlignment = .center
+            scoreValueLabel.frame = CGRect(x: labelXOffset, y: scoreLabel.frame.maxY + sameLabelSpacing, width: scoreMaxLabelWidth, height: scoreValueSize.height)
+            scoreValueLabel.textAlignment = .center
+            
+            timeLabel.textAlignment = .right
+            timeLabel.frame = CGRect(x: view.frame.width - timeSize.width - gameboardXOffset, y: (pinnyRect.height - labelHeight), width: timeSize.width, height: timeSize.height)
+            timeValueLabel.textAlignment = .right
+            timeValueLabel.frame = CGRect(x: view.frame.width - timeValueSize.width - gameboardXOffset, y: timeLabel.frame.maxY + sameLabelSpacing, width: timeValueSize.width, height: timeValueSize.height)
+            
+        } else {
+            let labelXOffset = view.frame.width/2.0
+
+            let scoreSize = scoreLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+            scoreLabel.frame = CGRect(x: labelXOffset, y: safeAreaInsets.top + yOffset, width: maxLabelWidth, height: scoreSize.height)
+            
+            let scoreValueSize = scoreValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+            scoreValueLabel.frame = CGRect(x: labelXOffset, y: scoreLabel.frame.maxY + sameLabelSpacing, width: maxLabelWidth, height: scoreValueSize.height)
+            
+            let timeSize = timeLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+            timeLabel.frame = CGRect(x: labelXOffset, y: scoreValueLabel.frame.maxY + labelSpacing, width: maxLabelWidth, height: timeSize.height)
+            
+            let timeValueSize = timeValueLabel.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
+            timeValueLabel.frame = CGRect(x: labelXOffset, y: timeLabel.frame.maxY + sameLabelSpacing, width: maxLabelWidth, height: timeValueSize.height)
+            
+            let pinnyRect = CGRect(x: 0, y: scoreLabel.frame.origin.y, width: labelXOffset, height: timeValueLabel.frame.maxY - scoreLabel.frame.origin.y)
+            pinny.position = CGPoint(x: pinnyRect.midX, y: view.frame.height - pinnyRect.midY)
+        }
+        
         let shuffleLabelSize = shuffleButton.sizeThatFits(CGSize(width: maxLabelWidth, height: 80000))
         let minHeight: CGFloat = shuffleButton.image(for: .normal)?.size.height ?? 0
         let buttonHeight = max(minHeight, shuffleLabelSize.height)
-        shuffleButton.frame = CGRect(x: view.frame.midX - (maxLabelWidth/2), y: view.frame.height - (view.safeAreaInsets.bottom + buttonHeight + (scene.footerHeight - buttonHeight)/2.0) , width:maxLabelWidth, height: max(minHeight, buttonHeight))
+        shuffleButton.frame = CGRect(x: view.frame.midX - (maxLabelWidth/2), y: view.frame.height - (safeAreaInsets.bottom + buttonHeight + (scene.footerHeight - buttonHeight)/2.0) , width:maxLabelWidth, height: max(minHeight, buttonHeight))
     }
     
     @objc func handleShuffleButtonTapped() {

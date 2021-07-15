@@ -79,7 +79,7 @@ class TitleScene : SKScene {
         
         addChild(label1)
         label1.run(.fadeIn(withDuration: 2))
-        label1.position = CGPoint(x: view.center.x, y: view.frame.height - (pinny.frame.maxY + 60))
+        label1.position = CGPoint(x: view.center.x, y: pinny.frame.origin.y - label1.frame.height - 10)
         
         nextButton.setBackgroundImage(UIImage(named: "button-bg"), for: .normal)
         nextButton.setTitle("NEXT", for: .normal)

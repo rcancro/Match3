@@ -32,7 +32,12 @@ class GameBackgroundLayer : SKNode {
         footerSprite.anchorPoint = .zero
         footerSprite.zPosition = 0
         footerSprite.size = CGSize(width: size.width, height: footerSprite.size.height)
-        
+        update(with: size, insets: insets)
+        addChild(backgroundSprite)
+        addChild(footerSprite)
+    }
+    
+    func update(with size: CGSize, insets: UIEdgeInsets) {
         let footerHeight = footerSprite.size.height + insets.bottom
         
         let backgroundWidth = floor(((size.height - footerHeight) * backgroundSprite.size.width)/backgroundSprite.size.height)
@@ -52,8 +57,6 @@ class GameBackgroundLayer : SKNode {
         }
         
         footerSprite.position = CGPoint(x: 0, y: insets.bottom)
-        addChild(backgroundSprite)
-        addChild(footerSprite)
     }
     
     required init?(coder aDecoder: NSCoder) {

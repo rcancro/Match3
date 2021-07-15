@@ -144,13 +144,13 @@ class GameOverViewController: UIViewController {
         let scoreTitleSize = scoreTitleLabel.sizeThatFits(maxSize)
         scoreTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: gameOverTitleLabel.frame.maxY + paddingBeforeScore, width: maxLabelWidth, height: scoreTitleSize.height)
         
-        let scoreValueNegativePadding : CGFloat = -10.0
+        let scoreValueNegativePadding : CGFloat = -8.0
         let scoreValueSize = scoreValueLabel.sizeThatFits(maxSize)
         scoreValueLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: scoreTitleLabel.frame.maxY + scoreValueNegativePadding, width: maxLabelWidth, height: scoreValueSize.height)
         
         // High scores
         let highScoresTitleSize = highScoresTitleLabel.sizeThatFits(maxSize)
-        highScoresTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: 260, width: maxLabelWidth, height: highScoresTitleSize.height)
+        highScoresTitleLabel.frame = CGRect(x: view.frame.midX - (maxLabelWidth / 2), y: 280, width: maxLabelWidth, height: highScoresTitleSize.height)
         
         let tableTopPadding : CGFloat = 8.0
         let tableSidePadding : CGFloat = 60.0
