@@ -18,6 +18,7 @@ class Level {
     let shufflePenalityTime: TimeInterval = -5
     let hintDelayTime: TimeInterval = 6
     private var comboTimeMultiplier = 1.0
+    private var speedIncrease: CGFloat = 1.0
     
     func candy(atColumn column: Int, row: Int) -> Candy? {
         precondition(column >= 0 && column < numColumns)
@@ -225,7 +226,7 @@ class Level {
     private func calculateBonusTime(for  chains: Set<Chain>) {
         for chain in chains {
             let scoreChainLength = chain.length - 2
-            chain.bonusTime = ceil(Double(scoreChainLength) * 1.1 * comboTimeMultiplier)
+            chain.bonusTime = floor(Double(scoreChainLength) * 1.1 * comboTimeMultiplier)
             comboTimeMultiplier = comboTimeMultiplier * 1.5
         }
     }

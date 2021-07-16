@@ -12,10 +12,8 @@ class GameOverScene: SKScene {
     
     let gameOverLayer = SKNode()
     var backgroundLayer: GameOverBackgroundLayer?
-    let musicPaused: Bool
         
     init(size: CGSize, musicPaused: Bool) {
-        self.musicPaused = musicPaused
         super.init(size: size)
         addChild(gameOverLayer)
     }
@@ -29,9 +27,6 @@ class GameOverScene: SKScene {
         backgroundLayer = GameOverBackgroundLayer(size: view.frame.size, insets: insets)
         backgroundLayer?.animate(true)
         gameOverLayer.addChild(backgroundLayer!)
-        if !musicPaused {
-            run(SKAction.playSoundFileNamed("death", waitForCompletion: false))
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {

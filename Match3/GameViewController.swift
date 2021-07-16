@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 
 var testingCombos = false
-var skipInto = false
+var skipInto = true
 
 extension UIApplication {
     static var safeAreaInsetsAccordingToRicky: UIEdgeInsets {
@@ -60,12 +60,11 @@ class GameViewController: UIViewController {
     func beginGame() {
         
         score = 0
+        updateSpeedFactors(1.0)
         level.resetComboMultiplier()
         self.scene?.clearSprites(completion: {
             self.scene?.isPaused = false
             self.scene?.startCountDown {
-                
-                
                 self.timeValueLabel.setTime(duration: self.level.baseLevelTime)
                 self.timeValueLabel.startCountdown()
                 self.restartHintTimer()
@@ -323,11 +322,46 @@ class GameViewController: UIViewController {
     func handleMatches() {
         handleMatches(comboLevel: 0)
     }
+    
+    func speedFactorForScore(_ score: Int) -> CGFloat {
+        switch score {
+        case 0...2499:
+            return 1.0
+        case 2500...4999:
+            return 1.05
+        case 5000...7499:
+            return 1.1
+        case 7500...9999:
+            return 1.15
+        case 10000...14999:
+            return 1.2
+        case 15000...19999:
+            return 1.25
+        case 20000...29999:
+            return 1.3
+        case 30000...49999:
+            return 1.35
+        case 50000...99999:
+            return 1.4
+        case 100000...999999:
+            return 1.45
+        default:
+            return 1.5
+        }
+    }
+    
+    func updateSpeedFactors(_ speed: CGFloat) {
+        pinny.increaseSpeed(to: speed, duration: 1)
+        scene?.increaseSpeed(to: speed, duration: 1)
+        timeValueLabel.increaseSpeed(to: speed, duration: 1)
+    }
 
     func handleMatches(comboLevel: Int) {
         let chains = level.removeMatches()
         
         if chains.count == 0 {
+            let speed = speedFactorForScore(score)
+            updateSpeedFactors(speed)
             beginNextTurn()
             return
         }
@@ -363,15 +397,32 @@ class GameViewController: UIViewController {
     }
     
     func showGameOver() {
-        scene?.gameOver()
-        gameOverVC = GameOverViewController(score: score, musicPaused: musicPaused)
-        gameOverVC.onDismissCompletion = { [weak self] in
-            guard let strongSelf = self else { return }
-            strongSelf.beginGame()
+        let gameOverLabel = UILabel()
+        gameOverLabel.font = UIFont.customFont(ofSize: 60)
+        gameOverLabel.textColor = .white
+        gameOverLabel.text = "TIME UP!"
+        gameOverLabel.sizeToFit()
+        gameOverLabel.center = view.center
+        view.addSubview(gameOverLabel)
+        
+        if !musicPaused {
+            scene?.gameOver()
+            scene?.run(SKAction.playSoundFileNamed("death", waitForCompletion: false))
         }
-        gameOverVC.modalPresentationStyle = .overCurrentContext
+        
+        UIView.animate(withDuration: 1, delay: 2, options: .curveEaseInOut) {
+            gameOverLabel.alpha = 0.0
+        } completion: { finished in
+            self.scene?.gameOver()
+            self.gameOverVC = GameOverViewController(score: self.score, musicPaused: self.musicPaused)
+            self.gameOverVC.onDismissCompletion = { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.beginGame()
+            }
+            self.gameOverVC.modalPresentationStyle = .overCurrentContext
 
-        self.present(gameOverVC, animated: true, completion: nil)
+            self.present(self.gameOverVC, animated: true, completion: nil)
+        }
     }
     
     func wiggleHint() {

@@ -19,6 +19,7 @@ class CountdownLabel: UILabel {
     var timeRunningOutColor: UIColor = .halloweenRed
     weak var delegate: CountdownLabelDelegate?
     var normalTextColor: UIColor = .white
+    var timer: Timer?
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -28,20 +29,32 @@ class CountdownLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func startCountdown() {
+    func startCountdown(speedFactor: CGFloat = 1.0) {
         if remainingTime > 0 {
             normalTextColor = textColor
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] timer in
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0/Double(speedFactor), repeats: true, block: { [weak self] timer in
                 guard let strongSelf = self else { return }
-                strongSelf.remainingTime = max(0, strongSelf.remainingTime - 1)
-                strongSelf.updateText()
-                strongSelf.delegate?.countdownLabel(strongSelf, didChangeTo: strongSelf.remainingTime)
-                
-                if strongSelf.remainingTime == 0 {
-                    timer.invalidate()
-                    strongSelf.delegate?.countdownLabelDidExpire(strongSelf)
-                }
+                strongSelf.timerAction()
             })
+        }
+    }
+    
+    private func timerAction() {
+        remainingTime = max(0, remainingTime - 1)
+        updateText()
+        delegate?.countdownLabel(self, didChangeTo: self.remainingTime)
+        
+        if self.remainingTime == 0 {
+            timer?.invalidate()
+            timer = nil
+            delegate?.countdownLabelDidExpire(self)
+        }
+    }
+    
+    func increaseSpeed(to: CGFloat, duration: TimeInterval) {
+        if let timer = timer {
+            timer.invalidate()
+            startCountdown(speedFactor: to)
         }
     }
     

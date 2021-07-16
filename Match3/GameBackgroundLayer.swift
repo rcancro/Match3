@@ -21,6 +21,8 @@ class GameBackgroundLayer : SKNode {
     var footerHeight: CGFloat {
         return footerSprite.size.height
     }
+    
+    var animationAction: SKAction?
 
     init(size: CGSize, insets: UIEdgeInsets) {
         super.init()
@@ -78,16 +80,21 @@ class GameBackgroundLayer : SKNode {
         }
     }
     
+    func increaseSpeed(to factor: CGFloat, duration: TimeInterval) {
+        run(.speed(to: factor, duration: duration))
+    }
+
     func animate(_ doAnimate: Bool) {
         if doAnimate {
             let wait = SKAction.wait(forDuration: 0.5)
             let update = SKAction.run {
                 self.update()
             }
-            let seq = SKAction.sequence([wait,update])
-            run(SKAction.repeatForever(seq))
+            animationAction = SKAction.sequence([wait,update])
+            run(SKAction.repeatForever(animationAction!))
         } else {
             removeAllActions()
+            animationAction = nil
         }
     }
 

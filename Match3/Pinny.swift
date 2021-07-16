@@ -39,6 +39,10 @@ class Pinny : SKSpriteNode {
         return false
     }
     
+    func increaseSpeed(to factor: CGFloat, duration: TimeInterval) {
+        run(.speed(to: factor, duration: duration))
+    }
+    
     func animate() {
         let wait = SKAction.wait(forDuration: 0.5)
         let changeSprite = SKAction.run { [weak self] in
@@ -82,9 +86,11 @@ class Pinny : SKSpriteNode {
         
         if let additionalAction = additionalAction {
             let group = SKAction.group([changeSprite, additionalAction])
-            run(SKAction.repeatForever(SKAction.sequence([wait, group])))
+            let animationAction = SKAction.repeatForever(SKAction.sequence([wait, group]))
+            run(animationAction)
         } else {
-            run(SKAction.repeatForever(SKAction.sequence([wait, changeSprite])))
+            let animationAction = SKAction.repeatForever(SKAction.sequence([wait, changeSprite]))
+            run(animationAction)
         }
     }
     

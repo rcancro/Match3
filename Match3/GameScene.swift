@@ -108,6 +108,10 @@ class GameScene: SKScene {
         }
     }
 
+    func increaseSpeed(to factor: CGFloat, duration: TimeInterval) {
+        backgroundLayer?.increaseSpeed(to: speed, duration: duration)
+        backgroundSound.run(.changePlaybackRate(to: Float(factor), duration: duration))
+    }
     
     func startCountDown(completion: @escaping ()->Void, aboutToCompletion: (()->Void)?) {
         
